@@ -418,6 +418,45 @@ textarea.form-input{resize:vertical;min-height:70px}
 #ai-chat-messages::-webkit-scrollbar{width:3px}
 #ai-chat-messages::-webkit-scrollbar-thumb{background:#c8d8f0;border-radius:2px}
 
+/* ── NECESSIDADE DE COMPRA ── */
+.nc-highlight{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer;
+  border-radius:12px;padding:15px 20px;margin-bottom:18px;transition:box-shadow .15s;
+}
+.nc-highlight:hover{box-shadow:0 4px 16px rgba(21,101,192,.14)}
+.nc-alert{background:linear-gradient(135deg,#fff5f5 0%,#ffeaea 100%);border:1px solid #f3b9b9}
+.nc-warn{background:linear-gradient(135deg,#fffaf0 0%,#fff3dc 100%);border:1px solid #f4d08a}
+.nc-good{background:linear-gradient(135deg,#f0fdf4 0%,#e3f9ec 100%);border:1px solid #a7e0c6}
+.nc-hl-ico{font-size:1.7rem;line-height:1;flex-shrink:0}
+.nc-hl-title{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;color:#0d2240}
+.nc-hl-desc{font-size:.78rem;color:#2c5282;margin-top:3px;line-height:1.5}
+.nc-levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.nc-lv{border-radius:10px;padding:13px 15px;border:1px solid;cursor:pointer;transition:transform .12s}
+.nc-lv:hover{transform:translateY(-1px)}
+.nc-lv .nc-lv-l{font-size:.63rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.nc-lv .nc-lv-v{font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;line-height:1.1;margin-top:3px}
+.nc-lv .nc-lv-d{font-size:.68rem;opacity:.85;margin-top:2px}
+.nc-lv-critico{background:#fdeeee;border-color:#f3b9b9;color:#a41b1b}
+.nc-lv-comprar{background:#fff1f1;border-color:#f6c9c9;color:#b91c1c}
+.nc-lv-atencao{background:#fff8e8;border-color:#f4d08a;color:#96590a}
+.nc-lv-saudavel{background:#eafaf2;border-color:#a7e0c6;color:#0f7a52}
+.nc-lv-semlimite{background:#eef1f6;border-color:#cbd5e1;color:#5a6b82}
+.pr{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;font-size:.63rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;border:1px solid}
+.pr-critica{background:#fdeeee;color:#a41b1b;border-color:#f3b9b9}
+.pr-alta{background:#fff1f1;color:#b91c1c;border-color:#f6c9c9}
+.pr-media{background:#fff8e8;color:#96590a;border-color:#f4d08a}
+.pr-normal{background:#eafaf2;color:#0f7a52;border-color:#a7e0c6}
+.pr-semlimite{background:#eef1f6;color:#5a6b82;border-color:#cbd5e1}
+.nc-por{font-size:.7rem;color:#6b8cae;line-height:1.5;margin-top:3px}
+.lc-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eef2f9}
+.lc-item .lc-n{font-size:.88rem;font-weight:600;color:#0d2240}
+.lc-item .lc-s{font-size:.71rem;color:#6b8cae;margin-top:2px}
+.lc-item .lc-q{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:800;color:#1565c0;white-space:nowrap}
+@media(max-width:768px){
+  .nc-highlight{flex-direction:column;align-items:stretch;text-align:left}
+  .nc-levels{grid-template-columns:repeat(2,1fr)}
+}
+
 /* ── MOVIMENTAÇÕES POR COLABORADOR ── */
 .cc-highlight{
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;
@@ -735,6 +774,10 @@ html,body{max-width:100%;overflow-x:hidden}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
       <span class="nav-label">Movimentações por Colaborador</span>
     </div>
+    <div class="nav-link" data-section="compras" onclick="nav('compras')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3A1 1 0 005.4 17H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      <span class="nav-label">Necessidade de Compra</span>
+    </div>
     <div class="nav-link" data-section="inventario" onclick="nav('inventario')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11l3 3 5-6M4 6h16M4 6v13a1 1 0 001 1h14a1 1 0 001-1V6M9 3h6"/></svg>
       <span class="nav-label">Inventário & Ajustes</span>
@@ -833,6 +876,7 @@ html,body{max-width:100%;overflow-x:hidden}
           <button class="qa-btn qa-out" onclick="openExitModal()"><span class="qa-ico">⬆</span>Saída</button>
           <button class="qa-btn qa-del" onclick="openEntregaModal()"><span class="qa-ico">📦</span>Entrega</button>
           <button class="qa-btn" onclick="nav('consulta')"><span class="qa-ico">🔎</span>Consultar colaborador</button>
+          <button class="qa-btn" onclick="nav('compras')"><span class="qa-ico">🛒</span>Necessidade de compra</button>
           <button class="qa-btn" onclick="nav('inventario')"><span class="qa-ico">📋</span>Inventário</button>
           <button class="qa-btn" onclick="nav('reports')"><span class="qa-ico">📊</span>Relatórios</button>
         </div>
@@ -847,6 +891,9 @@ html,body{max-width:100%;overflow-x:hidden}
         </div>
         <button class="btn btn-primary" onclick="nav('consulta')" style="flex-shrink:0">Consultar colaborador</button>
       </div>
+
+      <!-- ══ NECESSIDADE DE COMPRA (destaque) ══ -->
+      <div id="dash-compras" class="nc-highlight" onclick="nav('compras')"></div>
 
       <!-- ══ INDICADORES OPERACIONAIS ══ -->
       <div class="grid-4" style="margin-bottom:18px">
@@ -1274,6 +1321,75 @@ html,body{max-width:100%;overflow-x:hidden}
         <div style="font-size:2.2rem;margin-bottom:10px">🔎</div>
         <div style="font-size:.92rem;color:#2c5282;font-weight:600;margin-bottom:4px">Selecione um colaborador para começar</div>
         <div style="font-size:.78rem">A consulta usa exatamente os registros já existentes no sistema — entradas, saídas e entregas.</div>
+      </div>
+    </div>
+
+    <!-- ══════ NECESSIDADE DE COMPRA ══════ -->
+    <div id="s-compras" class="section">
+      <div class="page-header">
+        <div class="page-title">Necessidade de Compra</div>
+        <div class="page-subtitle">Identifique automaticamente os itens que precisam ser repostos antes que o estoque acabe</div>
+      </div>
+
+      <!-- Painel de níveis -->
+      <div class="nc-levels" id="nc-levels"></div>
+
+      <!-- Aviso de produtos sem limite -->
+      <div id="nc-semlimite"></div>
+
+      <!-- Filtros -->
+      <div class="search-bar">
+        <input id="nc-q" class="form-input" style="max-width:260px" placeholder="🔍  Produto, código ou categoria..."/>
+        <select id="nc-cat" class="form-input" style="max-width:190px"><option value="">Todas as categorias</option></select>
+        <select id="nc-nivel" class="form-input" style="max-width:210px">
+          <option value="repor">Somente o que precisa repor</option>
+          <option value="critico">⛔ Críticos (zerados)</option>
+          <option value="comprar">🔴 Comprar</option>
+          <option value="atencao">🟡 Atenção</option>
+          <option value="saudavel">🟢 Saudável</option>
+          <option value="semlimite">⚪ Sem mínimo configurado</option>
+          <option value="todos">Todos os produtos</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="abrirListaCompras()">🛒 Gerar lista de compras</button>
+        <button class="btn btn-ghost btn-sm" onclick="genPDF('compras')">PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="genExcel('compras')">Excel</button>
+      </div>
+
+      <div id="nc-total" style="font-size:.8rem;color:#2c5282;background:#f0f4fa;border:1px solid #c8d8f0;border-radius:9px;padding:10px 14px;margin-bottom:14px"></div>
+
+      <div class="tbl-wrap tbl-scroll">
+        <table class="dtbl">
+          <thead><tr>
+            <th>Prioridade</th><th>Produto</th><th>Categoria</th><th>Estoque</th><th>Mín.</th><th>Ideal</th>
+            <th>Consumo médio</th><th>Cobertura</th><th>Comprar</th><th>Custo unit.</th><th>Custo estimado</th><th></th>
+          </tr></thead>
+          <tbody id="nc-body"></tbody>
+        </table>
+        <div class="pager-area" id="pager-compras"></div>
+      </div>
+
+      <div class="sep"></div>
+
+      <!-- Fechamento mensal -->
+      <div class="card">
+        <div class="card-title">Fechamento Mensal</div>
+        <div style="font-size:.78rem;color:#6b8cae;margin-bottom:12px">
+          Consolida o consumo do mês escolhido com a situação atual do estoque e a sugestão de reposição.
+        </div>
+        <div class="search-bar" style="margin-bottom:12px">
+          <select id="fech-mes" class="form-input" style="max-width:150px"></select>
+          <select id="fech-ano" class="form-input" style="max-width:120px"></select>
+          <button class="btn btn-primary btn-sm" onclick="renderFechamento()">Gerar fechamento</button>
+          <button class="btn btn-ghost btn-sm" onclick="genPDF('fechamento')">PDF</button>
+          <button class="btn btn-ghost btn-sm" onclick="genExcel('fechamento')">Excel</button>
+        </div>
+        <div id="fech-resumo"></div>
+        <div class="tbl-wrap tbl-scroll" style="box-shadow:none;margin-top:12px">
+          <table class="dtbl">
+            <thead><tr><th>Produto</th><th>Categoria</th><th>Consumo do mês</th><th>Estoque atual</th><th>Mín.</th><th>Ideal</th><th>Consumo médio</th><th>Comprar</th><th>Prioridade</th></tr></thead>
+            <tbody id="fm-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -1768,7 +1884,12 @@ html,body{max-width:100%;overflow-x:hidden}
         </select>
       </div>
       <div class="form-group"><label class="form-label">Quantidade inicial</label><input id="f-qty" type="number" class="form-input" min="0" step="any" value="0"/></div>
-      <div class="form-group"><label class="form-label">Estoque mínimo</label><input id="f-min" type="number" class="form-input" min="0" step="any" value="0"/></div>
+      <div class="form-group"><label class="form-label">Estoque mínimo</label><input id="f-min" type="number" class="form-input" min="0" step="any" value="0"/>
+        <div class="form-note">Limite de segurança — abaixo disso o sistema sugere compra.</div></div>
+      <div class="form-group"><label class="form-label">Estoque ideal</label><input id="f-ideal" type="number" class="form-input" min="0" step="any" value="0"/>
+        <div class="form-note">Nível desejado após a reposição. Define quanto comprar.</div></div>
+      <div class="form-group"><label class="form-label">Custo unitário (R$)</label><input id="f-custo" type="number" class="form-input" min="0" step="0.01" placeholder="Opcional"/>
+        <div class="form-note">Se informado, o sistema calcula o custo estimado da compra.</div></div>
     </div>
 
     <div style="margin-top:14px">
@@ -2009,6 +2130,20 @@ html,body{max-width:100%;overflow-x:hidden}
         <input id="d-resp" class="form-input" placeholder="Almoxarife responsável" list="dl-colab-d"/>
         <datalist id="dl-colab-d"></datalist>
       </div>
+      <div class="form-group">
+        <label class="form-label">Motivo da nova entrega</label>
+        <select id="d-motivo" class="form-input">
+          <option value="">— não informado —</option>
+          <option>Perda</option>
+          <option>Danificado</option>
+          <option>Vencido</option>
+          <option>Tamanho inadequado</option>
+          <option>Substituição</option>
+          <option>Nova necessidade operacional</option>
+          <option>Outro</option>
+        </select>
+        <div class="form-note" id="d-motivo-note">Opcional. Ajuda na rastreabilidade quando o item já foi entregue antes.</div>
+      </div>
       <div class="form-group"><label class="form-label">Nº CA (quando EPI)</label><input id="d-ca" class="form-input" placeholder="Certificado de Aprovação"/></div>
       <div class="form-group"><label class="form-label">Documento / Requisição</label><input id="d-nf" class="form-input" placeholder="Opcional"/></div>
       <div class="form-group" style="grid-column:1/-1"><label class="form-label">Observação</label><textarea id="d-obs" class="form-input" rows="2"></textarea></div>
@@ -2103,7 +2238,7 @@ html,body{max-width:100%;overflow-x:hidden}
         <option value="aj">Ajustes</option>
       </select>
     </div>
-    <div class="tbl-wrap tbl-scroll"><div id="fm-body"></div></div>
+    <div class="tbl-wrap tbl-scroll"><div id="fech-body"></div></div>
   </div>
 </div>
 
@@ -2149,6 +2284,26 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeAjusteModal()">Cancelar</button>
       <button class="btn btn-primary" onclick="confirmAjuste()">Revisar e confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LISTA DE COMPRAS ═══ -->
+<div id="m-lista" class="modal-bg" style="z-index:640">
+  <div class="modal" style="width:620px;max-width:96vw">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">🛒 Lista de Compras</div>
+        <div style="font-size:.7rem;color:#6b8cae;margin-top:3px">Somente produtos que precisam de reposição</div>
+      </div>
+      <button class="modal-close" onclick="closeListaCompras()">✕</button>
+    </div>
+    <div id="lc-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeListaCompras()">Fechar</button>
+      <button class="btn btn-ghost" onclick="copiarListaCompras()">📋 Copiar</button>
+      <button class="btn btn-success" onclick="genExcel('lista')">Excel</button>
+      <button class="btn btn-primary" onclick="genPDF('lista')">PDF</button>
     </div>
   </div>
 </div>
@@ -2237,7 +2392,9 @@ function rowProduct(p){
   return {id:p.id,code:p.code,name:p.name,cat:p.cat||null,unit:p.unit||'UN',
     qty:Number(p.qty)||0,min_qty:Number(p.min)||0,loc:p.loc||null,ca:p.ca||null,
     fornecedor:p.fornecedor||null,obs:p.obs||null,
-    ativo:p.ativo!==false};
+    ativo:p.ativo!==false,
+    ideal_qty:Number(p.ideal)||0,
+    custo:(p.custo==null||p.custo===''?null:Number(p.custo))};
 }
 function rowMovement(m){
   return {id:m.id,mov_type:m.t,product_id:m.pid||null,product_name:m.pn||null,
@@ -2245,7 +2402,7 @@ function rowMovement(m){
     colab:m.colab||null,obra:m.ob||null,nf:m.nf||null,obs:m.obs||null,
     saldo_ant:(m.saldoAnt==null?null:Number(m.saldoAnt)),
     saldo_pos:(m.saldoPos==null?null:Number(m.saldoPos)),
-    grp:m.grp||null,mat:m.mat||null,pcode:m.pcode||null};
+    grp:m.grp||null,mat:m.mat||null,pcode:m.pcode||null,motivo:m.motivo||null};
 }
 function rowObra(o){
   return {id:o.id,code:o.code||null,name:o.name,cliente:o.cliente||null,
@@ -2259,7 +2416,7 @@ function rowEpi(e){
   return {id:e.id,product_id:e.pid||null,product_name:e.pn||null,
     qty:Number(e.q)||0,delivery_date:e.d||null,collaborator:e.colab||null,
     obra:e.obra||null,ca_number:e.ca||null,responsible:e.resp||null,obs:e.obs||null,
-    grp:e.grp||null};
+    grp:e.grp||null,motivo:e.motivo||null};
 }
 
 // ══════════════════════════════════════════
@@ -2399,14 +2556,18 @@ create table if not exists epi_deliveries (
 
 -- ── COLUNAS NOVAS (ativo/inativo, saldos, agrupamento) ────────
 alter table products       add column if not exists ativo boolean default true;
+alter table products       add column if not exists ideal_qty numeric default 0;
+alter table products       add column if not exists custo numeric;
 alter table products       add column if not exists updated_at timestamptz default now();
 alter table movements      add column if not exists saldo_ant numeric;
 alter table movements      add column if not exists saldo_pos numeric;
 alter table movements      add column if not exists grp text;
 alter table movements      add column if not exists mat text;
 alter table movements      add column if not exists pcode text;
+alter table movements      add column if not exists motivo text;
 alter table movements      add column if not exists updated_at timestamptz default now();
 alter table epi_deliveries add column if not exists grp text;
+alter table epi_deliveries add column if not exists motivo text;
 alter table epi_deliveries add column if not exists updated_at timestamptz default now();
 alter table obras          add column if not exists updated_at timestamptz default now();
 alter table collaborators  add column if not exists updated_at timestamptz default now();
@@ -2621,13 +2782,14 @@ async function pullFromSupabase(){
       fetch(SUPA_URL+'/collaborators?select=*',{headers:SUPA_HDR}),
       fetch(SUPA_URL+'/epi_deliveries?select=*',{headers:SUPA_HDR}),
     ]);
-    if(rP.ok){const rows=await rP.json();if(rows.length>0){db.sP(rows.map(r=>({id:r.id,code:r.code,name:r.name,cat:r.cat||'',unit:r.unit||'UN',qty:r.qty||0,min:r.min_qty||0,loc:r.loc||'',ca:r.ca||'',fornecedor:r.fornecedor||'',obs:r.obs||'',ativo:r.ativo!==false})));console.log('[REALTEC] '+rows.length+' produtos do Supabase.');}}
+    if(rP.ok){const rows=await rP.json();if(rows.length>0){db.sP(rows.map(r=>({id:r.id,code:r.code,name:r.name,cat:r.cat||'',unit:r.unit||'UN',qty:r.qty||0,min:r.min_qty||0,loc:r.loc||'',ca:r.ca||'',fornecedor:r.fornecedor||'',obs:r.obs||'',ativo:r.ativo!==false,
+      ideal:Number(r.ideal_qty)||0,custo:(r.custo==null?null:Number(r.custo))})));console.log('[REALTEC] '+rows.length+' produtos do Supabase.');}}
     if(rM.ok){const rows=await rM.json();if(rows.length>0){db.sM(rows.map(r=>({id:r.id,t:r.mov_type,pid:r.product_id||'',pn:r.product_name||'',q:r.qty||0,d:r.mov_date||'',resp:r.responsible||'',colab:r.colab||'',ob:r.obra||'',nf:r.nf||'',obs:r.obs||'',
       saldoAnt:(r.saldo_ant==null?undefined:Number(r.saldo_ant)),saldoPos:(r.saldo_pos==null?undefined:Number(r.saldo_pos)),
-      grp:r.grp||'',mat:r.mat||'',pcode:r.pcode||'',tset:1})));}}
+      grp:r.grp||'',mat:r.mat||'',pcode:r.pcode||'',motivo:r.motivo||'',tset:1})));}}
     if(rO.ok){const rows=await rO.json();if(rows.length>0){db.sO(rows.map(r=>({id:r.id,code:r.code||'',name:r.name,cliente:r.cliente||'',resp:r.responsible||'',status:r.status||'ativa',obs:r.obs||''})));}}
     if(rC.ok){const rows=await rC.json();if(rows.length>0){db.sC(rows.map(r=>({id:r.id,mat:r.matricula||'',name:r.name,cargo:r.cargo||'',setor:r.setor||'',cpf:r.cpf||''})));}}
-    if(rE.ok){const rows=await rE.json();if(rows.length>0){db.sE(rows.map(r=>({id:r.id,t:'epi',pid:r.product_id||'',pn:r.product_name||'',q:r.qty||0,d:r.delivery_date||'',colab:r.collaborator||'',obra:r.obra||'',ca:r.ca_number||'',resp:r.responsible||'',obs:r.obs||'',grp:r.grp||''})));}}
+    if(rE.ok){const rows=await rE.json();if(rows.length>0){db.sE(rows.map(r=>({id:r.id,t:'epi',pid:r.product_id||'',pn:r.product_name||'',q:r.qty||0,d:r.delivery_date||'',colab:r.collaborator||'',obra:r.obra||'',ca:r.ca_number||'',resp:r.responsible||'',obs:r.obs||'',grp:r.grp||'',motivo:r.motivo||''})));}}
     setSyncStatus('online','Supabase ✓');
     return true;
   }catch(e){
@@ -4560,17 +4722,34 @@ function tipoBadge(t){
   if(t==='s') return '<span class="st st-zero">Saída</span>';
   return '<span class="st" style="background:#e8f0fc;color:#1565c0;border-color:#b7d2f5">Entrega</span>';
 }
+/* Ordena por data/hora. Em empate (duas operações no mesmo segundo) usa a
+   ordem de gravação como desempate, para que a leitura e a cadeia de saldos
+   fiquem estáveis e reproduzíveis. */
+let _posCache={key:null,map:null};
+function movPosIndex(){
+  const k=(typeof dataStamp==='function')?dataStamp():String(db.movs().length);
+  if(_posCache.key===k) return _posCache.map;
+  const map=new Map(), base=db.movs();
+  for(let i=0;i<base.length;i++) map.set(base[i].id,i);
+  _posCache={key:k,map};
+  return map;
+}
 function movSort(list,asc){
-  return list.slice().sort((a,b)=>{
-    const da=toDate(a.d), dbb=toDate(b.d);
+  const pos=movPosIndex();
+  return list.slice().map((m,i)=>({m,i})).sort((A,B)=>{
+    const da=toDate(A.m.d), dbb=toDate(B.m.d);
     const va=da?da.getTime():0, vb=dbb?dbb.getTime():0;
-    return asc?va-vb:vb-va;
-  });
+    if(va!==vb) return asc?va-vb:vb-va;
+    const pa=pos.has(A.m.id)?pos.get(A.m.id):A.i;
+    const pb=pos.has(B.m.id)?pos.get(B.m.id):B.i;
+    return asc?pa-pb:pb-pa;
+  }).map(x=>x.m);
 }
 /* Índices em memória — evitam varrer as listas a cada linha em bases grandes. */
 let _idx={key:null,prod:{},colab:{}};
 function idxAtual(){
-  const k=db.prods().length+'|'+db.colab().length+'|'+(window._saldoVer||0);
+  const k=(typeof dataStamp==='function')?dataStamp():String(window._saldoVer||0)
+    +':'+((localStorage.getItem('rt_colab')||'').length);
   if(_idx.key===k) return _idx;
   const prod={},colab={};
   db.prods().forEach(p=>{prod[p.id]=p});
@@ -4846,6 +5025,7 @@ function openEntregaModal(prefColab){
   document.getElementById('d-ca').value='';
   document.getElementById('d-nf').value='';
   document.getElementById('d-obs').value='';
+  document.getElementById('d-motivo').value='';
   document.getElementById('d-items').innerHTML='';
   document.querySelectorAll('#m-entrega .chip[data-dp]').forEach(b=>b.classList.toggle('on',b.dataset.dp==='365'));
   document.getElementById('d-hist-custom').style.display='none';
@@ -5084,6 +5264,7 @@ function confirmEntrega(){
        <div><strong>Colaborador:</strong> ${h(c.name)}${c.mat?' · Mat. '+h(c.mat):''}</div>
        ${obra?`<div><strong>Obra / local:</strong> ${h(obra)}</div>`:''}
        ${resp?`<div><strong>Responsável:</strong> ${h(resp)}</div>`:''}
+       ${(document.getElementById('d-motivo').value)?`<div><strong>Motivo:</strong> ${h(document.getElementById('d-motivo').value)}</div>`:''}
        <div><strong>Data / hora:</strong> ${fmtDT(d)}</div>
      </div>
      <div style="font-weight:700;color:#0d2240;margin-bottom:5px">Itens</div>
@@ -5099,6 +5280,7 @@ function confirmEntrega(){
 }
 
 function gravarEntrega(c,linhas,d,obra,resp){
+  const motivo=(document.getElementById('d-motivo')||{}).value||'';
   const ca=document.getElementById('d-ca').value.trim();
   const nf=document.getElementById('d-nf').value.trim();
   const obs=document.getElementById('d-obs').value.trim();
@@ -5113,10 +5295,11 @@ function gravarEntrega(c,linhas,d,obra,resp){
     alterados.push(prods[i]);
     const mv={id:uid(),t:'epi',pid:l.p.id,pn:prods[i].name,pcode:prods[i].code||'',q:l.q,d,tset:1,grp,
       colab:c.name,mat:c.mat||'',ob:obra,resp,nf,ca:ca||prods[i].ca||'',
+      motivo:motivo||'',
       obs:obs||`Entrega para ${c.name}`,
       saldoAnt:Number(prods[i].qty)+l.q,saldoPos:Number(prods[i].qty)};
     novosMovs.push(mv);
-    novosEpis.push({id:uid(),t:'epi',pid:l.p.id,pn:prods[i].name,q:l.q,d,grp,
+    novosEpis.push({id:uid(),t:'epi',pid:l.p.id,pn:prods[i].name,q:l.q,d,grp,motivo,
       colab:c.name,obra,ca:ca||prods[i].ca||'',resp,obs});
   }
   db.sP(prods);
@@ -5153,12 +5336,13 @@ function toggleProdExtras(force){
   if(arr) arr.textContent=open?'▴':'▾';
 }
 function openProdModal(id){
-  const f={pid:'',code:'',name:'',cat:'',unit:'UN',qty:0,min:0,loc:'',obs:'',ca:'',fornecedor:''};
+  const f={pid:'',code:'',name:'',cat:'',unit:'UN',qty:0,min:0,ideal:0,custo:'',loc:'',obs:'',ca:'',fornecedor:''};
   let ativo=true, temHist=false;
   if(id){
     const p=findProd(id);
     if(p){ Object.assign(f,{pid:p.id,code:p.code||'',name:p.name,cat:p.cat||'',unit:p.unit||'UN',
-      qty:p.qty||0,min:p.min||0,loc:p.loc||'',obs:p.obs||'',ca:p.ca||'',fornecedor:p.fornecedor||''});
+      qty:p.qty||0,min:p.min||0,ideal:p.ideal||0,custo:(p.custo==null?'':p.custo),
+      loc:p.loc||'',obs:p.obs||'',ca:p.ca||'',fornecedor:p.fornecedor||''});
       ativo=isAtivo(p); temHist=prodHasHistory(id);
     }
   }
@@ -5198,6 +5382,9 @@ function saveProd(){
     unit:document.getElementById('f-unit').value,
     qty:parseFloat(String(document.getElementById('f-qty').value).replace(',','.'))||0,
     min:parseFloat(String(document.getElementById('f-min').value).replace(',','.'))||0,
+    ideal:parseFloat(String(document.getElementById('f-ideal').value).replace(',','.'))||0,
+    custo:(function(){const v=String(document.getElementById('f-custo').value).replace(',','.').trim();
+      if(v==='') return null; const n=parseFloat(v); return (isFinite(n)&&n>=0)?n:null;})(),
     loc:document.getElementById('f-loc').value.trim(),
     obs:document.getElementById('f-obs').value.trim(),
     ca:document.getElementById('f-ca').value.trim(),
@@ -5206,6 +5393,9 @@ function saveProd(){
   };
   if(data.qty<0) return feedbackErro('A quantidade não pode ser negativa.');
   if(data.min<0) return feedbackErro('O estoque mínimo não pode ser negativo.');
+  if(data.ideal<0) return feedbackErro('O estoque ideal não pode ser negativo.');
+  if(data.ideal>0&&data.min>0&&data.ideal<data.min)
+    return feedbackErro('O estoque ideal deve ser maior ou igual ao estoque mínimo.');
 
   const prods=db.prods();
   if(id){
@@ -6325,9 +6515,9 @@ function saldosDe(pid){
 /* Um único passo para todos os materiais — evita recalcular por linha em listas grandes. */
 let _saldoCache={key:null,data:{}};
 function saldosGlobais(){
-  const movs=db.movs();
-  const k=movs.length+'|'+db.prods().length+'|'+(window._saldoVer||0);
+  const k=(typeof dataStamp==='function')?dataStamp():String(window._saldoVer||0);
   if(_saldoCache.key===k) return _saldoCache.data;
+  const movs=db.movs();
   const porPid={};
   movs.forEach(m=>{ if(m.pid) (porPid[m.pid]=porPid[m.pid]||[]).push(m); });
   const saldoAtual={};
@@ -6892,7 +7082,7 @@ function aoaMovs(list){
 }
 const COLS_MOV5=[11,8,17,11,32,10,11,13,13,8,16,20,11,22,18,14,28];
 
-function genPDF(type){
+function genPDFv5(type){
   if(!window.jspdf) return feedbackErro('Biblioteca PDF não carregada.');
   const alias={full:'estoque',critical:'critico',history:'movimentacoes',epis_pdf:'entregas',obras:'saidas',inventory:'inventario'};
   type=alias[type]||type;
@@ -6952,7 +7142,7 @@ function genPDF(type){
   }catch(err){ console.error(err); feedbackErro('Erro ao gerar o PDF: '+err.message); }
 }
 
-function genExcel(type){
+function genExcelv5(type){
   if(!window.XLSX) return feedbackErro('Biblioteca Excel não carregada.');
   const alias={products:'estoque',movements:'movimentacoes',full:'completo'};
   type=alias[type]||type;
@@ -7027,6 +7217,7 @@ function refreshAll(){
   try{
     window._saldoVer=(window._saldoVer||0)+1;
     _saldoCache={key:null,data:{}};
+    _consumoIdx={key:null,data:{}}; _linhasCache={key:null,data:null};
     updBadge();
     const active=document.querySelector('.section.active');
     const id=active?active.id.replace('s-',''):'dashboard';
@@ -7376,6 +7567,663 @@ function changePage(key,p){
     if(document.querySelector('.modal-bg.open')) return;
     if(ev.key==='c'||ev.key==='C') nav('consulta');
   });
+})();
+
+
+// ══════════════════════════════════════════════════════════════════
+// REALTEC v7 — INTELIGÊNCIA DE ESTOQUE E COMPRAS
+// Nenhuma base nova: estoque ideal e custo são campos do próprio
+// produto; o consumo é calculado a partir de db.movs() (saídas e
+// entregas). Integrado aos alertas e à atualização automática.
+// ══════════════════════════════════════════════════════════════════
+
+sectionMetaV4.compras='Necessidade de Compra';
+
+/* Faixa de "atenção": estoque acima do mínimo, porém a 30% dele ou menos. */
+const NC_MARGEM_ATENCAO = 0.30;
+/* Histórico mínimo para estimar consumo, para não inventar médias. */
+const NC_MIN_MOVS = 2;
+const NC_MIN_DIAS = 30;
+
+function idealDe(p){ return Math.max(0, Number(p.ideal)||0); }
+function custoDe(p){ const c=Number(p.custo); return (isFinite(c)&&c>0)?c:null; }
+function temLimite(p){ return Number(p.min)>0; }
+
+// ─────────────────────────────────────────────
+// 1. CONSUMO REAL (saídas e entregas — nunca entradas)
+// ─────────────────────────────────────────────
+/* Carimbo de versão dos dados sem desserializar nada. */
+function dataStamp(){
+  try{
+    return (localStorage.getItem('rt_products')||'').length+':'
+         + (localStorage.getItem('rt_movs')||'').length+':'
+         + (window._saldoVer||0);
+  }catch(e){ return String(window._saldoVer||0); }
+}
+let _consumoIdx={key:null,data:{}};
+function consumoIndex(){
+  const k=dataStamp();
+  if(_consumoIdx.key===k) return _consumoIdx.data;
+  const movs=db.movs();
+  const g={};
+  for(const m of movs){
+    if(!m.pid) continue;
+    if(m.t!=='s'&&m.t!=='epi') continue;   /* entradas e ajustes não são consumo */
+    (g[m.pid]=g[m.pid]||[]).push(m);
+  }
+  _consumoIdx={key:k,data:g};
+  return g;
+}
+function movsConsumo(pid){ return consumoIndex()[pid]||[]; }
+function somaPeriodo(list,dias){
+  const from=daysAgoStr(dias);
+  return list.filter(m=>inPeriod(m.d,from,'')).reduce((a,m)=>a+(Number(m.q)||0),0);
+}
+/* Consumo por mês nos últimos 12 meses: [{ym,label,qtd}] */
+function consumoMensal(list){
+  const g={};
+  const hoje=new Date();
+  for(let i=11;i>=0;i--){
+    const d=new Date(hoje.getFullYear(),hoje.getMonth()-i,1);
+    const ym=d.getFullYear()+'-'+pad2(d.getMonth()+1);
+    g[ym]={ym,label:d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}),qtd:0};
+  }
+  list.forEach(m=>{
+    const d=toDate(m.d); if(!d) return;
+    const ym=d.getFullYear()+'-'+pad2(d.getMonth()+1);
+    if(g[ym]) g[ym].qtd+=Number(m.q)||0;
+  });
+  return Object.values(g);
+}
+/* Análise completa de consumo de um produto. */
+function analiseConsumo(p){
+  const list=movsConsumo(p.id);
+  /* Sem consumo registrado não há o que estimar — evita trabalho desnecessário. */
+  if(!list.length) return {list:[],suficiente:false,diasHistorico:0,c30:0,c90:0,c365:0,
+    mensal:[],maior:null,mediaMes:null,baseMedia:'',consumoDia:null,cobertura:null,tendencia:'—'};
+  const datas=list.map(m=>toDate(m.d)).filter(Boolean).sort((a,b)=>a-b);
+  const primeira=datas[0]||null;
+  const diasHistorico=primeira?Math.max(1,Math.round((Date.now()-primeira.getTime())/86400000)):0;
+  const suficiente = list.length>=NC_MIN_MOVS && diasHistorico>=NC_MIN_DIAS;
+
+  const c30=somaPeriodo(list,30), c90=somaPeriodo(list,90), c365=somaPeriodo(list,365);
+  const mensal=suficiente?consumoMensal(list):[];
+  const comMovimento=mensal.filter(x=>x.qtd>0);
+  const maior=comMovimento.length?comMovimento.reduce((a,b)=>b.qtd>a.qtd?b:a):null;
+
+  /* Média mensal: usa a janela mais confiável disponível. */
+  let mediaMes=null, baseMedia='';
+  if(suficiente){
+    if(diasHistorico>=90){ mediaMes=c90/3; baseMedia='últimos 90 dias'; }
+    else { mediaMes=c30; baseMedia='últimos 30 dias'; }
+  }
+  const consumoDia = (mediaMes!=null&&mediaMes>0) ? mediaMes/30 : null;
+  const cobertura = (consumoDia&&consumoDia>0) ? Math.floor(Number(p.qty)/consumoDia) : null;
+
+  /* Tendência: últimos 30 dias contra os 30 anteriores. */
+  let tendencia='—';
+  if(suficiente){
+    const ate=new Date(); ate.setDate(ate.getDate()-30);
+    const ant=list.filter(m=>inPeriod(m.d,daysAgoStr(60),
+        ate.getFullYear()+'-'+pad2(ate.getMonth()+1)+'-'+pad2(ate.getDate())))
+      .reduce((a,m)=>a+(Number(m.q)||0),0);
+    if(ant===0&&c30===0) tendencia='sem consumo';
+    else if(ant===0) tendencia='alta';
+    else if(c30>ant*1.2) tendencia='alta';
+    else if(c30<ant*0.8) tendencia='queda';
+    else tendencia='estável';
+  }
+  return {list,suficiente,diasHistorico,c30,c90,c365,mensal,maior,mediaMes,baseMedia,consumoDia,cobertura,tendencia};
+}
+
+// ─────────────────────────────────────────────
+// 2. NÍVEL, PRIORIDADE E SUGESTÃO
+// ─────────────────────────────────────────────
+const NC_NIVEL={
+  critico:  {chave:'critico',  ico:'⛔', nome:'Crítico',   prio:'Crítica', prioCls:'pr-critica',   ord:0},
+  comprar:  {chave:'comprar',  ico:'🔴', nome:'Comprar',   prio:'Alta',    prioCls:'pr-alta',      ord:1},
+  atencao:  {chave:'atencao',  ico:'🟡', nome:'Atenção',   prio:'Média',   prioCls:'pr-media',     ord:2},
+  saudavel: {chave:'saudavel', ico:'🟢', nome:'Saudável',  prio:'Normal',  prioCls:'pr-normal',    ord:3},
+  semlimite:{chave:'semlimite',ico:'⚪', nome:'Sem limite',prio:'Sem limite',prioCls:'pr-semlimite',ord:4}
+};
+function nivelDe(p){
+  if(!isAtivo(p)) return null;
+  const q=Number(p.qty)||0, mn=Number(p.min)||0;
+  if(q<=0) return NC_NIVEL.critico;                    /* zerado tem prioridade máxima */
+  if(mn<=0) return NC_NIVEL.semlimite;                 /* sem limite não gera alerta de compra */
+  if(q<=mn) return NC_NIVEL.comprar;
+  if(q<=mn*(1+NC_MARGEM_ATENCAO)) return NC_NIVEL.atencao;
+  return NC_NIVEL.saudavel;
+}
+/* Quantidade a comprar — nunca negativa, nunca inventada. */
+function sugestaoCompra(p,nivel){
+  const q=Number(p.qty)||0, mn=Number(p.min)||0, id=idealDe(p);
+  if(!nivel||nivel.ord>2) return {qtd:0,base:''};
+  if(id>0)  return {qtd:Math.max(0,id-q), base:'estoque ideal ('+fmtQ(id)+') menos o estoque atual'};
+  if(mn>0)  return {qtd:Math.max(0,mn-q), base:'estoque mínimo ('+fmtQ(mn)+') menos o estoque atual — defina o estoque ideal para uma reposição completa'};
+  return {qtd:0,base:''};
+}
+/* Linha consolidada de um produto. */
+function linhaCompra(p){
+  const nivel=nivelDe(p); if(!nivel) return null;
+  const a=analiseConsumo(p);
+  const sug=sugestaoCompra(p,nivel);
+  const custo=custoDe(p);
+  return {p,nivel,analise:a,sugerido:sug.qtd,baseSugestao:sug.base,
+    custoUnit:custo, custoTotal:(custo!=null?custo*sug.qtd:null)};
+}
+let _linhasCache={key:null,data:null};
+function linhasCompra(){
+  const k=dataStamp();
+  if(_linhasCache.key===k) return _linhasCache.data;
+  const out=db.prods().filter(isAtivo).map(linhaCompra).filter(Boolean)
+    .sort((x,y)=> x.nivel.ord-y.nivel.ord
+      || y.sugerido-x.sugerido
+      || String(x.p.name).localeCompare(String(y.p.name),'pt-BR'));
+  _linhasCache={key:k,data:out};
+  return out;
+}
+function linhasParaRepor(){ return linhasCompra().filter(l=>l.sugerido>0); }
+function contagemNiveis(){
+  const c={critico:0,comprar:0,atencao:0,saudavel:0,semlimite:0};
+  linhasCompra().forEach(l=>c[l.nivel.chave]++);
+  return c;
+}
+function fmtMoeda(v){
+  if(v==null) return '—';
+  return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function txtConsumo(a){
+  if(!a.suficiente) return '<span style="color:#6b8cae">Histórico insuficiente</span>';
+  return `<strong>${fmtQ(Math.round(a.mediaMes*10)/10)}</strong>/mês`;
+}
+function txtCobertura(l){
+  const a=l.analise;
+  if(!a.suficiente||!a.consumoDia) return '<span style="color:#6b8cae">—</span>';
+  if(Number(l.p.qty)<=0) return '<strong style="color:#a41b1b">Zerado</strong>';
+  const d=a.cobertura;
+  const cor=d<=7?'#a41b1b':d<=15?'#96590a':'#0f7a52';
+  return `<strong style="color:${cor}">≈ ${d} dia(s)</strong>`;
+}
+
+// ─────────────────────────────────────────────
+// 3. TELA DE NECESSIDADE DE COMPRA
+// ─────────────────────────────────────────────
+function ncFiltradas(){
+  let list=linhasCompra();
+  const q=((document.getElementById('nc-q')||{}).value)||'';
+  const cat=((document.getElementById('nc-cat')||{}).value)||'';
+  const nv=((document.getElementById('nc-nivel')||{}).value)||'repor';
+  if(q.trim()) list=list.filter(l=>matchTokens([l.p.name,l.p.code,l.p.cat].filter(Boolean).join(' '),q));
+  if(cat) list=list.filter(l=>l.p.cat===cat);
+  if(nv==='repor') list=list.filter(l=>l.nivel.ord<=1);
+  else if(nv!=='todos') list=list.filter(l=>l.nivel.chave===nv);
+  return list;
+}
+function ncNivel(chave){
+  const sel=document.getElementById('nc-nivel'); if(!sel) return;
+  sel.value=chave; pages['compras']=1; renderCompras();
+  const sec=document.getElementById('s-compras');
+  if(sec&&sec.scrollIntoView) sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderCompras(){
+  const cats=[...new Set(db.prods().map(p=>p.cat).filter(Boolean))].sort();
+  const sel=document.getElementById('nc-cat');
+  if(sel){ const cur=sel.value;
+    sel.innerHTML='<option value="">Todas as categorias</option>'+cats.map(c=>`<option value="${h(c)}">${h(c)}</option>`).join('');
+    sel.value=cur; }
+
+  const c=contagemNiveis();
+  document.getElementById('nc-levels').innerHTML=`
+    <div class="nc-lv nc-lv-critico"  onclick="ncNivel('critico')"><div class="nc-lv-l">⛔ Crítico</div><div class="nc-lv-v">${c.critico}</div><div class="nc-lv-d">estoque zerado</div></div>
+    <div class="nc-lv nc-lv-comprar"  onclick="ncNivel('comprar')"><div class="nc-lv-l">🔴 Comprar</div><div class="nc-lv-v">${c.comprar}</div><div class="nc-lv-d">no mínimo ou abaixo</div></div>
+    <div class="nc-lv nc-lv-atencao"  onclick="ncNivel('atencao')"><div class="nc-lv-l">🟡 Atenção</div><div class="nc-lv-v">${c.atencao}</div><div class="nc-lv-d">próximo do limite</div></div>
+    <div class="nc-lv nc-lv-saudavel" onclick="ncNivel('saudavel')"><div class="nc-lv-l">🟢 Saudável</div><div class="nc-lv-v">${c.saudavel}</div><div class="nc-lv-d">acima do mínimo</div></div>
+    <div class="nc-lv nc-lv-semlimite" onclick="ncNivel('semlimite')"><div class="nc-lv-l">⚪ Sem limite</div><div class="nc-lv-v">${c.semlimite}</div><div class="nc-lv-d">sem mínimo definido</div></div>`;
+
+  const semLim=document.getElementById('nc-semlimite');
+  semLim.innerHTML = c.semlimite
+    ? `<div class="cc-aviso" style="margin-bottom:16px">
+        <div class="cc-av-ico">⚪</div>
+        <div style="flex:1">
+          <div class="cc-av-t">Produtos sem estoque mínimo configurado</div>
+          <div class="cc-av-d"><strong>${c.semlimite}</strong> produto(s) não têm limite definido, então o sistema não gera alerta de compra para eles.
+            Defina o estoque mínimo e o ideal no cadastro para incluí-los na análise.</div>
+          <div style="margin-top:8px"><button class="btn btn-ghost btn-xs" onclick="ncNivel('semlimite')">Ver produtos</button></div>
+        </div></div>`
+    : '';
+
+  const list=ncFiltradas();
+  const repor=list.filter(l=>l.sugerido>0);
+  const comCusto=repor.filter(l=>l.custoTotal!=null);
+  const totalCusto=comCusto.reduce((a,l)=>a+l.custoTotal,0);
+  const semCusto=repor.length-comCusto.length;
+  document.getElementById('nc-total').innerHTML=
+    `<strong>${list.length}</strong> produto(s) no filtro · <strong>${repor.length}</strong> com reposição sugerida · `+
+    `total sugerido: <strong>${fmtQ(repor.reduce((a,l)=>a+l.sugerido,0))}</strong> unidade(s)`+
+    (comCusto.length?` · custo estimado: <strong>${fmtMoeda(totalCusto)}</strong>`:'')+
+    (semCusto?`<br><span style="color:#6b8cae">${semCusto} produto(s) sem custo cadastrado — não entram no total estimado.</span>`:'');
+
+  const {slice,total,page,totalPages}=paginate(list,'compras');
+  const tb=document.getElementById('nc-body');
+  if(!slice.length){
+    tb.innerHTML='<tr class="empty-row"><td colspan="12">Nenhum produto neste filtro. Estoque sob controle.</td></tr>';
+    renderPager('compras',0,1,1,'pager-compras'); return;
+  }
+  tb.innerHTML=slice.map(l=>{
+    const p=l.p, a=l.analise;
+    return `<tr>
+      <td data-label="Prioridade"><span class="pr ${l.nivel.prioCls}">${l.nivel.ico} ${l.nivel.prio}</span></td>
+      <td class="td-main" data-label="Produto" style="color:#0d2240;font-weight:600;cursor:pointer" onclick="openFichaMat('${h(p.id)}')">
+        ${h(p.name)}${p.code?`<span style="color:#6b8cae;font-weight:400;font-size:.8rem"> · ${h(p.code)}</span>`:''}
+        ${l.sugerido>0&&l.baseSugestao?`<div class="nc-por">Sugestão baseada em: ${h(l.baseSugestao)}.</div>`:''}
+        ${a.suficiente?`<div class="nc-por">Consumo em ${h(a.baseMedia)} · tendência ${h(a.tendencia)}${a.maior?` · maior mês: ${fmtQ(a.maior.qtd)} (${h(a.maior.label)})`:''}</div>`
+                      :`<div class="nc-por">Histórico insuficiente para estimativa de consumo — regra baseada em estoque atual, mínimo e ideal.</div>`}
+      </td>
+      <td data-label="Categoria" style="color:#2c5282;font-size:.76rem">${h(p.cat)||'—'}</td>
+      <td data-label="Estoque" style="font-weight:700;color:${qtyColor(p)}">${fmtQ(p.qty)} <span style="font-size:.68rem;font-weight:400;color:#6b8cae">${h(unitOf(p))}</span></td>
+      <td data-label="Mínimo" style="color:#6b8cae">${Number(p.min)>0?fmtQ(p.min):'<span style="color:#a9bcd4">não definido</span>'}</td>
+      <td data-label="Ideal" style="color:#6b8cae">${idealDe(p)>0?fmtQ(idealDe(p)):'<span style="color:#a9bcd4">não definido</span>'}</td>
+      <td data-label="Consumo médio">${txtConsumo(a)}</td>
+      <td data-label="Cobertura">${txtCobertura(l)}</td>
+      <td data-label="Comprar" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:.95rem;color:${l.sugerido>0?'#1565c0':'#6b8cae'}">${l.sugerido>0?fmtQ(l.sugerido):'—'}</td>
+      <td data-label="Custo unit." style="color:#2c5282">${l.custoUnit!=null?fmtMoeda(l.custoUnit):'<span style="color:#a9bcd4">não informado</span>'}</td>
+      <td data-label="Custo estimado" style="font-weight:700;color:#0d2240">${l.custoTotal!=null&&l.sugerido>0?fmtMoeda(l.custoTotal):'—'}</td>
+      <td class="td-acts"><button class="btn btn-xs btn-sync" onclick="openProdModal('${h(p.id)}')">Configurar</button></td>
+    </tr>`;
+  }).join('');
+  renderPager('compras',total,page,totalPages,'pager-compras');
+  montarSeletoresFechamento();
+}
+
+// ─────────────────────────────────────────────
+// 4. LISTA DE COMPRAS
+// ─────────────────────────────────────────────
+function abrirListaCompras(){
+  const list=linhasParaRepor();
+  const box=document.getElementById('lc-body');
+  if(!list.length){
+    box.innerHTML='<div class="cc-ok"><span style="font-size:1.1rem">✓</span><div><strong>Estoque sob controle.</strong><br>Nenhum produto precisa de reposição no momento.</div></div>';
+  }else{
+    const comCusto=list.filter(l=>l.custoTotal!=null);
+    const total=comCusto.reduce((a,l)=>a+l.custoTotal,0);
+    box.innerHTML=list.map(l=>`<div class="lc-item">
+        <div style="min-width:0">
+          <div class="lc-n">${l.nivel.ico} ${h(l.p.name)}</div>
+          <div class="lc-s">${h(l.p.cat)||'sem categoria'} · estoque ${fmtQ(l.p.qty)} · mínimo ${fmtQ(l.p.min)}${idealDe(l.p)>0?' · ideal '+fmtQ(idealDe(l.p)):''}${l.custoUnit!=null?' · '+fmtMoeda(l.custoUnit)+'/un':''}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="lc-q">${fmtQ(l.sugerido)} ${h(unitOf(l.p))}</div>
+          ${l.custoTotal!=null?`<div class="lc-s">${fmtMoeda(l.custoTotal)}</div>`:'<div class="lc-s">custo não informado</div>'}
+        </div>
+      </div>`).join('')
+      +`<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0 2px;font-size:.86rem">
+          <strong style="color:#0d2240">${list.length} item(ns)</strong>
+          <strong style="font-family:'Poppins',sans-serif;font-size:1.1rem;color:#1565c0">${comCusto.length?fmtMoeda(total):'Custo não informado'}</strong>
+        </div>`
+      +(comCusto.length<list.length?`<div style="font-size:.72rem;color:#6b8cae">${list.length-comCusto.length} item(ns) sem custo cadastrado não entram no total.</div>`:'');
+  }
+  document.getElementById('m-lista').classList.add('open');
+}
+function closeListaCompras(){document.getElementById('m-lista').classList.remove('open')}
+function copiarListaCompras(){
+  const list=linhasParaRepor();
+  if(!list.length) return toast('Nenhum produto precisa de reposição.','info');
+  const txt='LISTA DE COMPRAS — REALTEC ENGENHARIA\n'+new Date().toLocaleString('pt-BR')+'\n\n'
+    +list.map(l=>`${l.p.name} — ${fmtQ(l.sugerido)} ${unitOf(l.p)}`).join('\n');
+  const ta=document.createElement('textarea');
+  ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast('Lista copiada para a área de transferência.','success'); }
+  catch(e){ toast('Não foi possível copiar automaticamente.','warning'); }
+  ta.remove();
+}
+
+// ─────────────────────────────────────────────
+// 5. FECHAMENTO MENSAL
+// ─────────────────────────────────────────────
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function montarSeletoresFechamento(){
+  const mes=document.getElementById('fech-mes'), ano=document.getElementById('fech-ano');
+  if(!mes||!ano||mes.options.length) return;
+  const hoje=new Date();
+  mes.innerHTML=MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  mes.value=hoje.getMonth();
+  const anos=new Set([hoje.getFullYear()]);
+  db.movs().forEach(m=>{const d=toDate(m.d); if(d) anos.add(d.getFullYear())});
+  ano.innerHTML=[...anos].sort((a,b)=>b-a).map(a=>`<option value="${a}">${a}</option>`).join('');
+  ano.value=hoje.getFullYear();
+}
+function fechamentoRange(){
+  const mes=parseInt((document.getElementById('fech-mes')||{}).value);
+  const ano=parseInt((document.getElementById('fech-ano')||{}).value);
+  if(isNaN(mes)||isNaN(ano)) { const h=new Date(); return {mes:h.getMonth(),ano:h.getFullYear()}; }
+  return {mes,ano};
+}
+function fechamentoDados(){
+  const {mes,ano}=fechamentoRange();
+  const ini=new Date(ano,mes,1), fim=new Date(ano,mes+1,0);
+  const f=ini.getFullYear()+'-'+pad2(ini.getMonth()+1)+'-'+pad2(ini.getDate());
+  const t=fim.getFullYear()+'-'+pad2(fim.getMonth()+1)+'-'+pad2(fim.getDate());
+  const linhas=linhasCompra().map(l=>{
+    const consumoMes=movsConsumo(l.p.id).filter(m=>inPeriod(m.d,f,t)).reduce((a,m)=>a+(Number(m.q)||0),0);
+    return {...l,consumoMes};
+  });
+  return {mes,ano,from:f,to:t,rotulo:MESES[mes]+' / '+ano,linhas};
+}
+function renderFechamento(){
+  const d=fechamentoDados();
+  const comConsumo=d.linhas.filter(l=>l.consumoMes>0)
+    .sort((a,b)=>b.consumoMes-a.consumoMes);
+  const criticos=d.linhas.filter(l=>l.nivel.chave==='critico');
+  const comprar=d.linhas.filter(l=>l.sugerido>0);
+  const comCusto=comprar.filter(l=>l.custoTotal!=null);
+  const total=comCusto.reduce((a,l)=>a+l.custoTotal,0);
+
+  document.getElementById('fech-resumo').innerHTML=`
+    <div style="font-size:.8rem;color:#2c5282;background:#f0f4fa;border:1px solid #c8d8f0;border-radius:9px;padding:11px 14px">
+      <strong>${h(d.rotulo)}</strong> · ${comConsumo.length} produto(s) com consumo no mês
+      · consumo total: <strong>${fmtQ(d.linhas.reduce((a,l)=>a+l.consumoMes,0))}</strong> unidade(s)
+      · ⛔ ${criticos.length} crítico(s) · 🔴 ${comprar.length} para comprar
+      ${comCusto.length?` · custo estimado: <strong>${fmtMoeda(total)}</strong>`:''}
+    </div>`;
+
+  const lista=comConsumo.concat(comprar.filter(l=>l.consumoMes===0));
+  const tb=document.getElementById('fech-body');
+  tb.innerHTML=lista.length
+    ? lista.map(l=>`<tr>
+        <td class="td-main" data-label="Produto" style="color:#0d2240;font-weight:600">${h(l.p.name)}</td>
+        <td data-label="Categoria" style="color:#2c5282;font-size:.76rem">${h(l.p.cat)||'—'}</td>
+        <td data-label="Consumo do mês" style="font-weight:700;color:#dc2626">${fmtQ(l.consumoMes)}</td>
+        <td data-label="Estoque atual" style="font-weight:700;color:${qtyColor(l.p)}">${fmtQ(l.p.qty)}</td>
+        <td data-label="Mínimo" style="color:#6b8cae">${Number(l.p.min)>0?fmtQ(l.p.min):'—'}</td>
+        <td data-label="Ideal" style="color:#6b8cae">${idealDe(l.p)>0?fmtQ(idealDe(l.p)):'—'}</td>
+        <td data-label="Consumo médio">${txtConsumo(l.analise)}</td>
+        <td data-label="Comprar" style="font-weight:800;color:${l.sugerido>0?'#1565c0':'#6b8cae'}">${l.sugerido>0?fmtQ(l.sugerido):'—'}</td>
+        <td data-label="Prioridade"><span class="pr ${l.nivel.prioCls}">${l.nivel.ico} ${l.nivel.prio}</span></td>
+      </tr>`).join('')
+    : '<tr class="empty-row"><td colspan="9">Nenhum consumo registrado neste mês e nenhuma reposição pendente.</td></tr>';
+}
+
+// ─────────────────────────────────────────────
+// 6. DASHBOARD E ALERTAS INTEGRADOS
+// ─────────────────────────────────────────────
+function renderCardCompras(){
+  const el=document.getElementById('dash-compras'); if(!el) return;
+  const c=contagemNiveis();
+  const precisa=c.critico+c.comprar;
+  el.className='nc-highlight '+(c.critico?'nc-alert':precisa?'nc-alert':c.atencao?'nc-warn':'nc-good');
+  if(precisa){
+    el.innerHTML=`<div class="nc-hl-ico">🛒</div>
+      <div style="flex:1;min-width:210px">
+        <div class="nc-hl-title">Necessidade de Compra</div>
+        <div class="nc-hl-desc">
+          🔴 <strong>${precisa} item(ns) precisam de reposição</strong>${c.critico?` — sendo <strong>${c.critico}</strong> zerado(s)`:''}<br>
+          🟡 ${c.atencao} próximo(s) do limite · 🟢 ${c.saudavel} com estoque saudável
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="event.stopPropagation();nav('compras')" style="flex-shrink:0">Ver o que comprar</button>`;
+  }else{
+    el.innerHTML=`<div class="nc-hl-ico">🟢</div>
+      <div style="flex:1;min-width:210px">
+        <div class="nc-hl-title">Estoque sob controle</div>
+        <div class="nc-hl-desc">Nenhum item no mínimo ou abaixo. 🟡 ${c.atencao} próximo(s) do limite · 🟢 ${c.saudavel} saudável(is)${c.semlimite?` · ⚪ ${c.semlimite} sem mínimo definido`:''}</div>
+      </div>
+      <button class="btn btn-ghost" onclick="event.stopPropagation();nav('compras')" style="flex-shrink:0">Abrir análise</button>`;
+  }
+}
+
+/* Alertas passam a usar os mesmos níveis — um só sistema. */
+function renderAlerts(){
+  const linhas=linhasCompra();
+  const criticos=linhas.filter(l=>l.nivel.chave==='critico');
+  const comprar =linhas.filter(l=>l.nivel.chave==='comprar');
+  const atencao =linhas.filter(l=>l.nivel.chave==='atencao');
+  const semLim  =linhas.filter(l=>l.nivel.chave==='semlimite');
+  let html='';
+  const bloco=(titulo,cor,arr,cls)=>{
+    if(!arr.length) return '';
+    let out=`<div style="font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:700;color:${cor};letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">${titulo} (${arr.length})</div>`;
+    arr.forEach(l=>{
+      const p=l.p, a=l.analise;
+      out+=`<div class="alert-card ${cls}">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:.84rem;color:${cor};cursor:pointer" onclick="openFichaMat('${h(p.id)}')">${l.nivel.ico} ${h(p.name)} ${stTag(p)}</div>
+          <div style="font-size:.73rem;margin-top:3px;color:#6b6152">
+            Código ${h(p.code)||'—'} · Estoque <strong>${fmtQ(p.qty)} ${h(unitOf(p))}</strong> · Mínimo ${Number(p.min)>0?fmtQ(p.min):'não definido'}${idealDe(p)>0?' · Ideal '+fmtQ(idealDe(p)):''}
+            ${a.suficiente?` · Consumo ${fmtQ(Math.round(a.mediaMes*10)/10)}/mês${a.cobertura!=null&&Number(p.qty)>0?` · cobertura ≈ ${a.cobertura} dia(s)`:''}`:' · histórico insuficiente para estimativa'}
+          </div>
+          ${l.sugerido>0?`<div style="font-size:.75rem;margin-top:4px;color:#1565c0"><strong>Sugestão: comprar ${fmtQ(l.sugerido)} ${h(unitOf(p))}</strong>${l.custoTotal!=null?` · ${fmtMoeda(l.custoTotal)}`:''}</div>`:''}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-success btn-xs" onclick="openEntryModal()">Registrar entrada</button>
+          <button class="btn btn-ghost btn-xs" onclick="nav('compras')">Ver compras</button>
+        </div>
+      </div>`;
+    });
+    return out+'<div style="margin-bottom:20px"></div>';
+  };
+  html+=bloco('⛔ Itens zerados','#a41b1b',criticos,'alert-critical');
+  html+=bloco('🔴 No mínimo ou abaixo','#b91c1c',comprar,'alert-critical');
+  html+=bloco('🟡 Próximos do limite','#96590a',atencao,'alert-warning');
+  if(!criticos.length&&!comprar.length&&!atencao.length){
+    html=`<div style="text-align:center;padding:60px 0;color:#6b8cae">
+      <div style="font-size:2.6rem;margin-bottom:12px">🟢</div>
+      <div style="font-size:.95rem;color:#2c5282">Estoque sob controle. Nenhum item no limite ou abaixo.</div></div>`;
+  }
+  if(semLim.length){
+    html+=`<div class="cc-aviso"><div class="cc-av-ico">⚪</div><div style="flex:1">
+      <div class="cc-av-t">${semLim.length} produto(s) sem estoque mínimo configurado</div>
+      <div class="cc-av-d">Sem limite definido o sistema não consegue avaliar a necessidade de reposição desses itens.</div>
+      <div style="margin-top:8px"><button class="btn btn-ghost btn-xs" onclick="nav('compras');ncNivel('semlimite')">Configurar agora</button></div>
+    </div></div>`;
+  }
+  document.getElementById('alerts-body').innerHTML=html;
+  updBadge();
+}
+
+// ─────────────────────────────────────────────
+// 7. RELATÓRIOS
+// ─────────────────────────────────────────────
+const NC_HEAD=['Prioridade','Código','Produto','Categoria','Unidade','Estoque atual','Estoque mínimo','Estoque ideal',
+  'Consumo médio mensal','Consumo 30 dias','Consumo 90 dias','Cobertura (dias)','Tendência',
+  'Quantidade sugerida','Custo unitário','Custo estimado','Base da sugestão'];
+function ncAoa(list){
+  return [NC_HEAD].concat(list.map(l=>{const p=l.p,a=l.analise;
+    return [l.nivel.prio,p.code||'',p.name,p.cat||'',unitOf(p),Number(p.qty)||0,Number(p.min)||0,idealDe(p),
+      a.suficiente?Math.round(a.mediaMes*10)/10:'Histórico insuficiente',a.c30,a.c90,
+      (a.suficiente&&a.cobertura!=null)?a.cobertura:'',a.suficiente?a.tendencia:'',
+      l.sugerido,l.custoUnit!=null?l.custoUnit:'Custo não informado',
+      l.custoTotal!=null&&l.sugerido>0?l.custoTotal:'',l.baseSugestao||'']}));
+}
+const NC_COLS=[12,12,32,18,9,13,14,13,20,15,15,15,12,18,15,15,44];
+
+function genPDF(type){
+  if(!window.jspdf) return feedbackErro('Biblioteca PDF não carregada.');
+  try{
+    if(type==='compras'||type==='lista'){
+      const lista = type==='lista' ? linhasParaRepor() : ncFiltradas();
+      const doc=pdfNew('landscape');
+      pdfHeader(doc, type==='lista'?'Lista de Compras':'Necessidade de Compra',
+        type==='lista'?'Somente itens com reposição sugerida':'Situação do estoque e sugestão de reposição');
+      if(!lista.length){ pdfVazio(doc,'Estoque sob controle — nenhum produto precisa de reposição.'); }
+      else if(type==='lista'){
+        doc.autoTable({
+          head:[['Prioridade','Código','Produto','Categoria','Estoque atual','Mínimo','Ideal','Comprar','Un','Custo unit.','Custo estimado']],
+          body:lista.map(l=>[l.nivel.prio,l.p.code||'—',l.p.name,l.p.cat||'—',fmtQ(l.p.qty),
+            Number(l.p.min)>0?fmtQ(l.p.min):'—',idealDe(l.p)>0?fmtQ(idealDe(l.p)):'—',
+            fmtQ(l.sugerido),unitOf(l.p),
+            l.custoUnit!=null?fmtMoeda(l.custoUnit):'Não informado',
+            l.custoTotal!=null?fmtMoeda(l.custoTotal):'—']),
+          ...PDF_STYLE,
+          didParseCell:d=>{if(d.section==='body'&&d.column.index===0){const v=d.cell.text[0];d.cell.styles.fontStyle='bold';
+            d.cell.styles.textColor=v==='Crítica'?[164,27,27]:v==='Alta'?[185,28,28]:v==='Média'?[150,89,10]:[15,122,82]}}
+        });
+        const comCusto=lista.filter(l=>l.custoTotal!=null);
+        let y=doc.lastAutoTable.finalY+9;
+        doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(13,34,64);
+        doc.text(`${lista.length} item(ns) · ${fmtQ(lista.reduce((a,l)=>a+l.sugerido,0))} unidade(s)`,10,y);
+        if(comCusto.length){
+          doc.text(`Custo estimado: ${fmtMoeda(comCusto.reduce((a,l)=>a+l.custoTotal,0))}`,10,y+6);
+          if(comCusto.length<lista.length){
+            doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(110,140,175);
+            doc.text(`${lista.length-comCusto.length} item(ns) sem custo cadastrado não entram no total.`,10,y+12);
+          }
+        }
+      }else{
+        doc.autoTable({
+          head:[['Prioridade','Código','Produto','Estoque','Mín.','Ideal','Consumo médio','Cobertura','Comprar','Custo unit.','Custo estimado']],
+          body:lista.map(l=>{const a=l.analise;
+            return [l.nivel.prio,l.p.code||'—',l.p.name,fmtQ(l.p.qty),
+              Number(l.p.min)>0?fmtQ(l.p.min):'—',idealDe(l.p)>0?fmtQ(idealDe(l.p)):'—',
+              a.suficiente?fmtQ(Math.round(a.mediaMes*10)/10)+'/mês':'Hist. insuficiente',
+              (a.suficiente&&a.cobertura!=null&&Number(l.p.qty)>0)?'≈ '+a.cobertura+' dias':'—',
+              l.sugerido>0?fmtQ(l.sugerido):'—',
+              l.custoUnit!=null?fmtMoeda(l.custoUnit):'Não informado',
+              (l.custoTotal!=null&&l.sugerido>0)?fmtMoeda(l.custoTotal):'—']}),
+          ...PDF_STYLE,
+          didParseCell:d=>{if(d.section==='body'&&d.column.index===0){const v=d.cell.text[0];d.cell.styles.fontStyle='bold';
+            d.cell.styles.textColor=v==='Crítica'?[164,27,27]:v==='Alta'?[185,28,28]:v==='Média'?[150,89,10]:[15,122,82]}}
+        });
+        let y=doc.lastAutoTable.finalY+8;
+        doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(110,140,175);
+        doc.text('Cobertura e consumo médio são estimativas com base nas saídas e entregas registradas — não são previsões exatas.',10,y);
+      }
+      pdfFooter(doc); return pdfSave(doc,type==='lista'?'lista-de-compras':'necessidade-de-compra');
+    }
+
+    if(type==='fechamento'){
+      const d=fechamentoDados();
+      const doc=pdfNew('landscape');
+      pdfHeader(doc,'Fechamento Mensal',d.rotulo);
+      const lista=d.linhas.filter(l=>l.consumoMes>0||l.sugerido>0)
+        .sort((a,b)=>a.nivel.ord-b.nivel.ord||b.consumoMes-a.consumoMes);
+      if(!lista.length) pdfVazio(doc,'Nenhum consumo registrado neste mês e nenhuma reposição pendente.');
+      else doc.autoTable({
+        head:[['Prioridade','Código','Produto','Categoria','Consumo do mês','Estoque atual','Mín.','Ideal','Consumo médio','Comprar','Custo estimado']],
+        body:lista.map(l=>{const a=l.analise;
+          return [l.nivel.prio,l.p.code||'—',l.p.name,l.p.cat||'—',fmtQ(l.consumoMes),fmtQ(l.p.qty),
+            Number(l.p.min)>0?fmtQ(l.p.min):'—',idealDe(l.p)>0?fmtQ(idealDe(l.p)):'—',
+            a.suficiente?fmtQ(Math.round(a.mediaMes*10)/10)+'/mês':'Hist. insuficiente',
+            l.sugerido>0?fmtQ(l.sugerido):'—',
+            (l.custoTotal!=null&&l.sugerido>0)?fmtMoeda(l.custoTotal):'—']}),
+        ...PDF_STYLE
+      });
+      pdfFooter(doc); return pdfSave(doc,'fechamento-'+d.ano+'-'+pad2(d.mes+1));
+    }
+    return genPDFv5(type);
+  }catch(err){ console.error(err); feedbackErro('Erro ao gerar o PDF: '+err.message); }
+}
+
+function genExcel(type){
+  if(!window.XLSX) return feedbackErro('Biblioteca Excel não carregada.');
+  try{
+    if(type==='compras'||type==='lista'){
+      const lista = type==='lista' ? linhasParaRepor() : ncFiltradas();
+      const wb=XLSX.utils.book_new();
+      const c=contagemNiveis();
+      const comCusto=lista.filter(l=>l.custoTotal!=null&&l.sugerido>0);
+      xlsSheet(wb,'Resumo',[
+        ['REALTEC ENGENHARIA — NECESSIDADE DE COMPRA'],
+        ['Gerado em',new Date().toLocaleString('pt-BR')],
+        [],
+        ['NÍVEL','QTD'],
+        ['Crítico (zerado)',c.critico],
+        ['Comprar (no mínimo ou abaixo)',c.comprar],
+        ['Atenção (próximo do limite)',c.atencao],
+        ['Saudável',c.saudavel],
+        ['Sem estoque mínimo configurado',c.semlimite],
+        [],
+        ['Itens com reposição sugerida',lista.filter(l=>l.sugerido>0).length],
+        ['Total de unidades sugeridas',lista.reduce((a,l)=>a+l.sugerido,0)],
+        ['Custo estimado (itens com custo)',comCusto.length?comCusto.reduce((a,l)=>a+l.custoTotal,0):'Custo não informado'],
+        ['Itens sem custo cadastrado',lista.filter(l=>l.sugerido>0&&l.custoTotal==null).length],
+        [],
+        ['Observação','Consumo médio e cobertura são estimativas baseadas nas saídas e entregas registradas.']
+      ],[40,26]);
+      xlsSheet(wb,type==='lista'?'Lista de Compras':'Necessidade de Compra',ncAoa(lista),NC_COLS);
+      return xlsSave(wb,type==='lista'?'lista-de-compras':'necessidade-de-compra');
+    }
+    if(type==='fechamento'){
+      const d=fechamentoDados();
+      const wb=XLSX.utils.book_new();
+      const criticos=d.linhas.filter(l=>l.nivel.chave==='critico');
+      const comprar=d.linhas.filter(l=>l.sugerido>0);
+      const comCusto=comprar.filter(l=>l.custoTotal!=null);
+      xlsSheet(wb,'Resumo',[
+        ['REALTEC ENGENHARIA — FECHAMENTO MENSAL'],
+        ['Mês de referência',d.rotulo],
+        ['Gerado em',new Date().toLocaleString('pt-BR')],
+        [],
+        ['Produtos com consumo no mês',d.linhas.filter(l=>l.consumoMes>0).length],
+        ['Consumo total do mês (unidades)',d.linhas.reduce((a,l)=>a+l.consumoMes,0)],
+        ['Itens críticos (zerados)',criticos.length],
+        ['Itens para comprar',comprar.length],
+        ['Unidades sugeridas',comprar.reduce((a,l)=>a+l.sugerido,0)],
+        ['Custo estimado',comCusto.length?comCusto.reduce((a,l)=>a+l.custoTotal,0):'Custo não informado']
+      ],[36,26]);
+      xlsSheet(wb,'Fechamento',
+        [['Prioridade','Código','Produto','Categoria','Unidade','Consumo do mês','Estoque atual','Estoque mínimo','Estoque ideal','Consumo médio mensal','Quantidade sugerida','Custo unitário','Custo estimado']]
+        .concat(d.linhas.filter(l=>l.consumoMes>0||l.sugerido>0)
+          .sort((a,b)=>a.nivel.ord-b.nivel.ord||b.consumoMes-a.consumoMes)
+          .map(l=>{const a=l.analise;
+            return [l.nivel.prio,l.p.code||'',l.p.name,l.p.cat||'',unitOf(l.p),l.consumoMes,
+              Number(l.p.qty)||0,Number(l.p.min)||0,idealDe(l.p),
+              a.suficiente?Math.round(a.mediaMes*10)/10:'Histórico insuficiente',
+              l.sugerido,l.custoUnit!=null?l.custoUnit:'Custo não informado',
+              (l.custoTotal!=null&&l.sugerido>0)?l.custoTotal:'']})),
+        [12,12,32,18,9,15,14,14,13,20,18,15,15]);
+      xlsSheet(wb,'Consumo por Produto',
+        [['Produto','Categoria','Consumo do mês','30 dias','90 dias','12 meses','Média mensal','Maior mês','Tendência']]
+        .concat(d.linhas.map(l=>{const a=l.analise;
+          return [l.p.name,l.p.cat||'',l.consumoMes,a.c30,a.c90,a.c365,
+            a.suficiente?Math.round(a.mediaMes*10)/10:'Histórico insuficiente',
+            a.maior?a.maior.qtd:'',a.suficiente?a.tendencia:'']})),
+        [32,18,15,10,10,11,15,11,12]);
+      return xlsSave(wb,'fechamento-'+d.ano+'-'+pad2(d.mes+1));
+    }
+    return genExcelv5(type);
+  }catch(err){ console.error(err); feedbackErro('Erro ao gerar o Excel: '+err.message); }
+}
+
+// ─────────────────────────────────────────────
+// 8. INTEGRAÇÃO (navegação e atualização automática)
+// ─────────────────────────────────────────────
+(function initV7(){
+  injectPagerAreas();
+  const navBase=nav;
+  nav=function(id){
+    navBase(id);
+    if(id==='compras'){ montarSeletoresFechamento(); pages['compras']=pages['compras']||1; renderCompras(); renderFechamento(); }
+  };
+  /* Toda entrada, saída, entrega ou ajuste atualiza níveis, alertas e dashboard. */
+  const refreshBase=refreshAll;
+  refreshAll=function(){
+    refreshBase();
+    try{
+      renderCardCompras();
+      const sec=document.getElementById('s-compras');
+      if(sec&&sec.classList.contains('active')){ renderCompras(); renderFechamento(); }
+    }catch(e){ console.warn('[REALTEC] compras:',e.message); }
+  };
+  const wire=(id,fn,ev)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev||'input',fn)};
+  wire('nc-q',()=>{pages['compras']=1;renderCompras()});
+  ['nc-cat','nc-nivel'].forEach(id=>wire(id,()=>{pages['compras']=1;renderCompras()},'change'));
+  ['fm-mes','fm-ano'].forEach(id=>wire(id,renderFechamento,'change'));
+
+  /* Paginação da nova tela */
+  const changeBase=changePage;
+  changePage=function(key,p){
+    if(key==='compras'){ pages[key]=p; return renderCompras(); }
+    changeBase(key,p);
+  };
+  document.addEventListener('keydown',ev=>{
+    if(ev.target.matches('input,textarea,select')) return;
+    if(document.querySelector('.modal-bg.open')) return;
+    if(ev.key==='m'||ev.key==='M') nav('compras');
+  });
+  montarSeletoresFechamento();
+  renderCardCompras();
 })();
 
 </script>
