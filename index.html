@@ -701,13 +701,6 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* v11 — modais empilhados, seletor de itens, correção de lançamentos */
 #m-prod,#m-colab{z-index:560}
-/* v12 — obras / centros de custo */
-#m-obra{z-index:570}#m-obra-lote{z-index:575}#m-obra-det{z-index:520}
-.badge-inativa{background:#eef1f6;color:#5a6b82;border:1px solid #cbd5e1}
-.fluxo-aviso{display:flex;gap:12px;align-items:flex-start;background:#e8f0fc;border:1px solid #b7d2f5;border-radius:11px;padding:12px 16px;margin-bottom:14px;font-size:.78rem;color:#1e3a5f;line-height:1.55}
-.fluxo-aviso .fa-ico{font-size:1.15rem;line-height:1.2;flex-shrink:0}
-.sum-line{font-size:.78rem;color:#2c5282;background:#f0f4fa;border:1px solid #c8d8f0;border-radius:9px;padding:9px 13px;margin-bottom:12px}
-.ac-wrap .form-input{width:100%}
 .pk-list{display:none;border:1px solid #c8d8f0;border-radius:9px;background:#fff;max-height:230px;overflow:auto;margin-top:6px;box-shadow:0 6px 18px rgba(13,34,64,.10)}
 .pk-list.open{display:block}
 .pk-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid #eef2f9;cursor:pointer;font-size:.8rem;color:#0d2240}
@@ -721,6 +714,8 @@ html,body{max-width:100%;overflow-x:hidden}
 .ce-note{font-size:.76rem;line-height:1.5;padding:9px 11px;border-radius:8px;background:#e8f0fc;border:1px solid #b7d2f5;color:#1e3a5f;margin:6px 0}
 .ce-note.ok{background:#f0fdf4;border-color:#86efac;color:#166534}
 @media(max-width:700px){.pk-it{padding:11px 12px}.pk-list{max-height:260px}}
+#m-obra,#m-obra-imp,#m-obra-det{z-index:560}
+.badge-inativa{background:#eef0f4;color:#5b6b82;border-color:#d3d9e3}
 </style>
 </head>
 <body>
@@ -810,7 +805,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="nav-group-label">Cadastros</div>
     <div class="nav-link" data-section="obras" onclick="nav('obras')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-      <span class="nav-label">Centros de Custo / Obras</span>
+      <span class="nav-label">Centro de Custo / Obras</span>
     </div>
     <div class="nav-link" data-section="colab" onclick="nav('colab')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -1157,13 +1152,13 @@ html,body{max-width:100%;overflow-x:hidden}
           <option value="180">Últimos 6 meses</option>
           <option value="365" selected>Últimos 12 meses</option>
         </select>
-        <select id="epi-colab" class="form-input" style="max-width:210px" title="Filtrar por colaborador"><option value="">Todos os colaboradores</option></select>
-        <select id="epi-obra" class="form-input" style="max-width:230px" title="Filtrar por obra / centro de custo"><option value="">Todas as obras</option></select>
-        <input id="epi-from" type="date" class="form-input" style="max-width:150px" title="Data inicial (substitui o período)"/>
-        <input id="epi-to" type="date" class="form-input" style="max-width:150px" title="Data final (substitui o período)"/>
-        <button class="btn btn-ghost btn-sm" onclick="epiLimpar()">Limpar filtros</button>
+        <input id="e-from" type="date" class="form-input" style="max-width:150px" title="Data inicial (substitui o período)"/>
+        <input id="e-to" type="date" class="form-input" style="max-width:150px" title="Data final"/>
+        <select id="e-obra" class="form-input" style="max-width:190px" title="Obra / centro de custo"></select>
+        <select id="e-colab" class="form-input" style="max-width:190px" title="Colaborador"></select>
+        <select id="e-cat" class="form-input" style="max-width:170px" title="Categoria"></select>
+        <button class="btn btn-ghost btn-sm" onclick="clearEpiFilters()">Limpar filtros</button>
       </div>
-      <div id="epi-sum" class="sum-line"></div>
       <div class="tbl-wrap tbl-scroll">
         <table class="dtbl">
           <thead><tr><th>Data / Hora</th><th>Colaborador</th><th>Item</th><th>Qtd</th><th>Obra / Local</th><th>CA Nº</th><th>Responsável</th><th>Obs</th><th>Ações</th></tr></thead>
@@ -1184,11 +1179,6 @@ html,body{max-width:100%;overflow-x:hidden}
           Nova Entrada
         </button>
       </div>
-      <div class="fluxo-aviso"><div class="fa-ico">ℹ️</div><div>
-        <strong>Recebimento de materiais.</strong> O recebimento é lançado na <strong>BA de Material</strong>. Esta versão do sistema <strong>ainda não possui integração automática</strong> com a BA de Material
-        (não há conexão ou importação implementada), por isso o saldo só aumenta aqui quando houver o lançamento em <em>Nova Entrada</em>.
-        Lance <strong>cada recebimento uma única vez</strong>: o sistema avisa se o mesmo item e documento já tiverem entrada registrada.
-        Não é preciso lançar nada aqui para entregas a colaboradores — a baixa é automática.</div></div>
       <div class="search-bar">
         <input id="e-search" class="form-input" style="max-width:250px" placeholder="🔍  Item, responsável ou nota fiscal..."/>
       </div>
@@ -1212,9 +1202,6 @@ html,body{max-width:100%;overflow-x:hidden}
           Nova Saída
         </button>
       </div>
-      <div class="fluxo-aviso"><div class="fa-ico">ℹ️</div><div>
-        <strong>Não repita entregas aqui.</strong> Quando um material ou EPI é entregue a um colaborador (aba <em>Entregas</em>), a <strong>baixa do estoque já é automática</strong>.
-        Use <em>Saídas</em> somente para consumo direto em obra, serviço ou manutenção <strong>sem colaborador</strong>.</div></div>
       <div class="search-bar">
         <input id="x-search" class="form-input" style="max-width:250px" placeholder="🔍  Item, obra, responsável ou documento..."/>
       </div>
@@ -1244,11 +1231,11 @@ html,body{max-width:100%;overflow-x:hidden}
         </select>
         <input id="h-mat" class="form-input" style="max-width:200px" placeholder="Material específico" list="dl-mat-h"/>
         <datalist id="dl-mat-h"></datalist>
+        <select id="h-obra" class="form-input" style="max-width:190px" title="Obra / centro de custo"></select>
+        <select id="h-colab" class="form-input" style="max-width:190px" title="Colaborador"></select>
+        <select id="h-cat" class="form-input" style="max-width:170px" title="Categoria"></select>
         <input id="h-from" type="date" class="form-input" style="max-width:150px" title="Data inicial"/>
         <input id="h-to" type="date" class="form-input" style="max-width:150px" title="Data final"/>
-        <select id="h-colab" class="form-input" style="max-width:200px" title="Colaborador"><option value="">Todos os colaboradores</option></select>
-        <select id="h-obra" class="form-input" style="max-width:220px" title="Obra / centro de custo"><option value="">Todas as obras</option></select>
-        <select id="h-cat" class="form-input" style="max-width:180px" title="Categoria do item"><option value="">Todas as categorias</option></select>
         <button class="btn btn-ghost btn-sm" onclick="clearHistFilters()">Limpar</button>
         <button class="btn btn-sync btn-sm" onclick="exportHistCSV()">⬇ CSV</button>
       </div>
@@ -1261,7 +1248,6 @@ html,body{max-width:100%;overflow-x:hidden}
         <button class="chip on" onclick="histPeriod(365)">12 meses</button>
         <button class="chip" onclick="histPeriod(-1)">Todo o período</button>
       </div>
-      <div id="h-sum" class="sum-line"></div>
       <div class="tbl-wrap tbl-scroll">
         <table class="dtbl">
           <thead><tr>
@@ -1511,35 +1497,29 @@ html,body{max-width:100%;overflow-x:hidden}
 
     <!-- ══════ OBRAS ══════ -->
     <div id="s-obras" class="section">
-      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
         <div>
-          <div class="page-title">Centros de Custo / Obras</div>
-          <div class="page-subtitle">Código e nome da obra — usados nas entregas, no histórico, nos filtros e no consumo por obra</div>
+          <div class="page-title">Centro de Custo / Obras</div>
+          <div class="page-subtitle">Códigos e nomes das obras da Realtec — usados nas entregas, no histórico e nos relatórios</div>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-ghost" onclick="openObraLote()">Importar lista</button>
-          <button class="btn btn-primary" onclick="openObraModal()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Nova Obra
-          </button>
-        </div>
+        <button class="btn btn-primary" onclick="openObraModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Nova Obra
+        </button>
       </div>
-      <div id="ob-legado"></div>
-      <div class="search-bar">
-        <input id="ob-search" class="form-input" style="max-width:280px" placeholder="🔍  Código, nome ou cliente..."/>
-        <select id="ob-status" class="form-input" style="max-width:190px">
-          <option value="ativas">Ativas</option>
-          <option value="todas">Todas</option>
-          <option value="inativas">Inativas / encerradas</option>
-        </select>
-        <button class="btn btn-ghost btn-sm" onclick="obrasLimpar()">Limpar filtros</button>
+      <div class="search-bar" style="margin-bottom:10px">
+        <input id="ob-q" class="form-input" style="max-width:300px" placeholder="🔍  Código ou nome da obra..."/>
+        <select id="ob-st" class="form-input" style="max-width:170px" onchange="pages['obras']=1;renderObras()"><option value="ativas">Somente ativas</option><option value="todas">Todas</option><option value="inativas">Somente inativas</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ob-q').value='';document.getElementById('ob-st').value='ativas';pages['obras']=1;renderObras()">Limpar</button>
+        <button class="btn btn-sync btn-sm" onclick="openObraImp()">⬆ Importar lista</button>
       </div>
       <div class="tbl-wrap tbl-scroll">
         <table class="dtbl">
-          <thead><tr><th>Código</th><th>Nome</th><th>Cliente</th><th>Responsável</th><th>Situação</th><th>Entregas</th><th>Qtd. consumida</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Código</th><th>Nome</th><th>Cliente</th><th>Responsável</th><th>Status</th><th>Materiais Retirados</th><th>Ações</th></tr></thead>
           <tbody id="obras-body"></tbody>
         </table>
       </div>
+      <div id="pager-obras"></div>
     </div>
 
     <!-- ══════ COLABORADORES ══════ -->
@@ -2044,13 +2024,9 @@ html,body{max-width:100%;overflow-x:hidden}
       </div>
       <div class="form-group"><label class="form-label">Quantidade <span class="required">*</span></label><input id="x-qty" type="number" class="form-input" min="0" step="any" value="1"/></div>
       <div class="form-group">
-        <label class="form-label">Obra / Centro de custo <span class="required">*</span></label>
-        <div class="ac-wrap">
-          <input id="x-obra" class="form-input" autocomplete="off" placeholder="Digite o código ou o nome da obra"/>
-          <div id="x-obra-list" class="ac-list"></div>
-        </div>
-        <div class="form-note" id="x-obra-note" style="color:#2c5282"></div>
-        <button type="button" class="btn btn-ghost btn-xs" style="align-self:flex-start" onclick="novaObraDe('x-obra')">+ Nova obra</button>
+        <label class="form-label">Obra / Destino <span class="required">*</span></label>
+        <input id="x-obra" class="form-input" placeholder="Obra, serviço, manutenção ou consumo" list="dl-obras-x"/>
+        <datalist id="dl-obras-x"></datalist>
       </div>
       <div class="form-group">
         <label class="form-label">Responsável pela retirada <span class="required">*</span></label>
@@ -2076,6 +2052,32 @@ html,body{max-width:100%;overflow-x:hidden}
 </div>
 
 <!-- ═══ OBRA MODAL ═══ -->
+<div id="m-obra-imp" class="modal-bg">
+  <div class="modal" style="width:520px;max-width:95vw">
+    <div class="modal-header"><div class="modal-title">Importar lista de obras</div><button class="modal-close" onclick="document.getElementById('m-obra-imp').classList.remove('open')">✕</button></div>
+    <div style="font-size:.78rem;color:#2c5282;line-height:1.6;margin-bottom:8px">Cole um centro de custo por linha no formato <strong>código - nome</strong> (ex.: <em>030 - NOME DA OBRA</em>). Itens já cadastrados são ignorados.</div>
+    <textarea id="oi-text" class="form-input" rows="8" oninput="obraImpPreview()" placeholder="Cole aqui a lista oficial de obras"></textarea>
+    <div id="oi-prev"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="document.getElementById('m-obra-imp').classList.remove('open')">Cancelar</button><button class="btn btn-primary" onclick="obraImpConfirmar()">Importar obras novas</button></div>
+  </div>
+</div>
+<div id="m-obra-det" class="modal-bg">
+  <div class="modal" style="width:880px;max-width:96vw">
+    <div class="modal-header"><div class="modal-title" id="od-title">Consumo da obra</div><button class="modal-close" onclick="document.getElementById('m-obra-det').classList.remove('open')">✕</button></div>
+    <div class="search-bar">
+      <input id="od-from" type="date" class="form-input" style="max-width:150px" title="Data inicial" onchange="renderObraDetalhe()"/>
+      <input id="od-to" type="date" class="form-input" style="max-width:150px" title="Data final" onchange="renderObraDetalhe()"/>
+      <select id="od-colab" class="form-input" style="max-width:240px" onchange="renderObraDetalhe()"></select>
+      <button class="btn btn-ghost btn-sm" onclick="obraDetLimpar()">Limpar filtros</button>
+      <button class="btn btn-sync btn-sm" onclick="obraDetCSV()">⬇ CSV</button>
+    </div>
+    <div id="od-kpis" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0"></div>
+    <div class="card-title" style="margin:6px 0">Consumo por item</div>
+    <div class="tbl-wrap tbl-scroll" style="max-height:30vh"><table class="dtbl"><thead><tr><th>Item</th><th>Código</th><th>Qtd. total</th><th>Lançamentos</th></tr></thead><tbody id="od-items"></tbody></table></div>
+    <div class="card-title" style="margin:14px 0 6px">Entregas e saídas</div>
+    <div class="tbl-wrap tbl-scroll" style="max-height:30vh"><table class="dtbl"><thead><tr><th>Data / Hora</th><th>Tipo</th><th>Colaborador</th><th>Item</th><th>Qtd</th><th>Responsável</th></tr></thead><tbody id="od-movs"></tbody></table></div>
+  </div>
+</div>
 <div id="m-obra" class="modal-bg">
   <div class="modal" style="width:460px;max-width:95vw">
     <div class="modal-header">
@@ -2085,12 +2087,12 @@ html,body{max-width:100%;overflow-x:hidden}
     <input type="hidden" id="o-id"/>
     <div class="form-grid">
       <div class="form-grid form-grid-2">
-        <div class="form-group"><label class="form-label">Código (centro de custo)</label><input id="o-code" class="form-input" placeholder="Ex: 030"/></div>
+        <div class="form-group"><label class="form-label">Código</label><input id="o-code" class="form-input" placeholder="Ex.: 030"/></div>
         <div class="form-group"><label class="form-label">Status</label>
-          <select id="o-status" class="form-input"><option value="ativa">Ativa</option><option value="pausada">Pausada</option><option value="concluida">Concluída</option></select>
+          <select id="o-status" class="form-input"><option value="ativa">Ativa</option><option value="pausada">Pausada</option><option value="concluida">Concluída</option><option value="inativa">Inativa (encerrada)</option></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Nome da Obra <span class="required">*</span></label><input id="o-name" class="form-input" placeholder="Ex: COLGATE SBC"/><div class="form-note">Aparece nas entregas como “código - nome”. Obras inativas continuam no histórico.</div></div>
+      <div class="form-group"><label class="form-label">Nome da Obra <span class="required">*</span></label><input id="o-name" class="form-input" placeholder="Ex.: NOME DA OBRA"/></div>
       <div class="form-group"><label class="form-label">Cliente</label><input id="o-cliente" class="form-input" placeholder="Nome do cliente"/></div>
       <div class="form-group"><label class="form-label">Engenheiro Responsável</label><input id="o-resp" class="form-input" placeholder="Eng. responsável"/></div>
       <div class="form-group"><label class="form-label">Observação</label><textarea id="o-obs" class="form-input" rows="2"></textarea></div>
@@ -2183,13 +2185,9 @@ html,body{max-width:100%;overflow-x:hidden}
     <!-- 3. COMPLEMENTO -->
     <div class="form-grid form-grid-2">
       <div class="form-group">
-        <label class="form-label">Obra / Centro de custo <span class="required">*</span></label>
-        <div class="ac-wrap">
-          <input id="d-obra" class="form-input" autocomplete="off" placeholder="Digite o código ou o nome da obra"/>
-          <div id="d-obra-list" class="ac-list"></div>
-        </div>
-        <div class="form-note" id="d-obra-note" style="color:#2c5282"></div>
-        <button type="button" class="btn btn-ghost btn-xs" style="align-self:flex-start" onclick="novaObraDe('d-obra')">+ Nova obra</button>
+        <label class="form-label">Obra / Local</label>
+        <input id="d-obra" class="form-input" placeholder="Obra ou local de uso" list="dl-obras-d"/>
+        <datalist id="dl-obras-d"></datalist>
       </div>
       <div class="form-group">
         <label class="form-label">Responsável pela entrega</label>
@@ -2389,52 +2387,6 @@ html,body{max-width:100%;overflow-x:hidden}
   </div>
 </div>
 
-<!-- ═══ DETALHE DA OBRA ═══ -->
-<div id="m-obra-det" class="modal-bg">
-  <div class="modal" style="width:900px;max-width:97vw">
-    <div class="modal-header">
-      <div><div class="modal-title" id="od-title">Obra</div><div style="font-size:.7rem;color:#6b8cae;margin-top:3px" id="od-sub"></div></div>
-      <button class="modal-close" onclick="closeObraDet()">✕</button>
-    </div>
-    <div class="search-bar" style="margin-bottom:12px">
-      <input id="od-from" type="date" class="form-input" style="max-width:150px" title="Data inicial"/>
-      <input id="od-to" type="date" class="form-input" style="max-width:150px" title="Data final"/>
-      <select id="od-colab" class="form-input" style="max-width:230px"><option value="">Todos os colaboradores</option></select>
-      <input id="od-item" class="form-input" style="max-width:200px" placeholder="🔍 Item ou código"/>
-      <button class="btn btn-ghost btn-sm" onclick="obraDetLimpar()">Limpar filtros</button>
-      <button class="btn btn-sync btn-sm" onclick="obraDetCSV()">⬇ CSV</button>
-    </div>
-    <div id="od-kpis" class="grid-4" style="margin-bottom:14px"></div>
-    <div class="form-label" style="margin-bottom:6px">Consumo por item</div>
-    <div class="tbl-wrap tbl-scroll" style="max-height:220px;overflow:auto;margin-bottom:14px">
-      <table class="dtbl"><thead><tr><th>Item</th><th>Qtd</th><th>Lançamentos</th></tr></thead><tbody id="od-itens"></tbody></table>
-    </div>
-    <div class="form-label" style="margin-bottom:6px">Entregas e saídas da obra</div>
-    <div class="tbl-wrap tbl-scroll" style="max-height:300px;overflow:auto">
-      <table class="dtbl"><thead><tr><th>Data / Hora</th><th>Tipo</th><th>Item</th><th>Qtd</th><th>Colaborador</th><th>Responsável</th></tr></thead><tbody id="od-lanc"></tbody></table>
-    </div>
-    <div style="font-size:.7rem;color:#6b8cae;margin-top:8px">Entregas canceladas não entram no consumo.</div>
-  </div>
-</div>
-
-<!-- ═══ IMPORTAR LISTA DE OBRAS ═══ -->
-<div id="m-obra-lote" class="modal-bg">
-  <div class="modal" style="width:560px;max-width:96vw">
-    <div class="modal-header">
-      <div><div class="modal-title">Importar lista de obras</div><div style="font-size:.7rem;color:#6b8cae;margin-top:3px">Cole uma obra por linha: <strong>030 - COLGATE SBC</strong></div></div>
-      <button class="modal-close" onclick="closeObraLote()">✕</button>
-    </div>
-    <textarea id="ol-txt" class="form-input" rows="9" placeholder="030 - COLGATE SBC&#10;(uma obra por linha: código - nome)" oninput="previewObraLote()"></textarea>
-    <div id="ol-prev" style="margin-top:10px"></div>
-    <div class="form-note" style="margin-top:6px">Códigos já cadastrados são ignorados. Nada é apagado nem alterado nas obras existentes.</div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeObraLote()">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmarObraLote()">Cadastrar obras</button>
-    </div>
-  </div>
-</div>
-
-<datalist id="dl-obras-d"></datalist><datalist id="dl-obras-x"></datalist>
 <!-- ═══ BARRA DE AÇÕES MOBILE ═══ -->
 <div id="mob-actions">
   <button onclick="openEntryModal()"><span class="mi">⬇</span>Entrada</button>
@@ -3087,7 +3039,7 @@ function renderDash(){
 
   // Recent
   const lastIn=movs.filter(m=>m.t==='e').slice(-5).reverse();
-  const lastOut=movs.filter(m=>m.t==='s'||m.t==='epi').slice(-5).reverse();
+  const lastOut=movs.filter(m=>(m.t==='s'||m.t==='epi')&&!m.canc).slice(-5).reverse();
   document.getElementById('dash-in').innerHTML=lastIn.length?lastIn.map(m=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
       <span style="color:#2c5282;font-size:.77rem">${h(m.pn)}</span>
@@ -3108,7 +3060,7 @@ function buildIOChart(movs){
   const step=2;
   const filtLabels=labels.filter((_,i)=>i%step===0);
   const filtIn=days.filter((_,i)=>i%step===0).map(d=>movs.filter(m=>m.t==='e'&&m.d&&m.d.startsWith(d)).reduce((a,m)=>a+m.q,0));
-  const filtOut=days.filter((_,i)=>i%step===0).map(d=>movs.filter(m=>(m.t==='s'||m.t==='epi')&&m.d&&m.d.startsWith(d)).reduce((a,m)=>a+m.q,0));
+  const filtOut=days.filter((_,i)=>i%step===0).map(d=>movs.filter(m=>(m.t==='s'||m.t==='epi')&&!m.canc&&m.d&&m.d.startsWith(d)).reduce((a,m)=>a+m.q,0));
   destroyChart('io');
   charts['io']=new Chart(document.getElementById('ch-io').getContext('2d'),{type:'line',data:{labels:filtLabels,datasets:[
     {label:'Entradas',data:filtIn,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.08)',tension:.4,fill:true,pointRadius:2.5,borderWidth:2},
@@ -3118,7 +3070,7 @@ function buildIOChart(movs){
 
 function buildObraChart(movs){
   const m={};
-  movs.filter(mv=>(mv.t==='s'||mv.t==='epi')&&mv.ob).forEach(mv=>{m[mv.ob]=(m[mv.ob]||0)+mv.q});
+  movs.filter(mv=>(mv.t==='s'||mv.t==='epi')&&!mv.canc&&mv.ob).forEach(mv=>{m[mv.ob]=(m[mv.ob]||0)+mv.q});
   const sorted=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6);
   destroyChart('obra');
   charts['obra']=new Chart(document.getElementById('ch-obra').getContext('2d'),{type:'doughnut',data:{labels:sorted.map(x=>x[0]),datasets:[{data:sorted.map(x=>x[1]),backgroundColor:['#1d6fdb','#10b981','#f59e0b','#ef4444','#8b5cf6','#3b82f6'],borderWidth:2,borderColor:'#ffffff'}]},options:{...CHART_CFG,plugins:{legend:{labels:{color:'#7a9bc0',font:{size:9},boxWidth:10,padding:8}}}}});
@@ -3126,7 +3078,7 @@ function buildObraChart(movs){
 
 function buildTopChart(movs){
   const m={};
-  movs.filter(mv=>mv.t==='s'||mv.t==='epi').forEach(mv=>{m[mv.pn]=(m[mv.pn]||0)+mv.q});
+  movs.filter(mv=>(mv.t==='s'||mv.t==='epi')&&!mv.canc).forEach(mv=>{m[mv.pn]=(m[mv.pn]||0)+mv.q});
   const sorted=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,8);
   destroyChart('top');
   charts['top']=new Chart(document.getElementById('ch-top').getContext('2d'),{type:'bar',data:{labels:sorted.map(x=>x[0].length>18?x[0].slice(0,17)+'…':x[0]),datasets:[{label:'Qtd Retirada',data:sorted.map(x=>x[1]),backgroundColor:'rgba(249,115,22,.7)',borderColor:'#1d6fdb',borderWidth:1,borderRadius:4}]},options:{...CHART_CFG,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:TICK_STYLE,grid:{color:GRID_COLOR},beginAtZero:true},y:{ticks:{...TICK_STYLE,color:'#7a9bc0'},grid:{display:false}}}}});
@@ -3699,7 +3651,7 @@ function genPDF(type){
     else doc.autoTable({head:[['Data','Colaborador','EPI','Qtd','Obra','Nº CA','Responsável']],body:epis.map(e=>[fmtDT(e.d),e.colab,e.pn,e.q,e.obra||'—',e.ca||'—',e.resp||'—']),...tblStyle});
   }else if(type==='obras'){
     addHeader('Saídas por Obra');
-    const movs=db.movs().filter(m=>(m.t==='s'||m.t==='epi')&&m.ob);
+    const movs=db.movs().filter(m=>(m.t==='s'||m.t==='epi')&&!m.canc&&m.ob);
     const map={};movs.forEach(m=>{if(!map[m.ob])map[m.ob]=[];map[m.ob].push(m)});
     let y=40;
     Object.entries(map).forEach(([obra,ms])=>{
@@ -4515,7 +4467,7 @@ function getStockContext(){
   const zeros = prods.filter(p=>p.qty<=0);
   const low   = prods.filter(p=>p.qty>0&&p.min>0&&p.qty<=p.min);
   const ok    = prods.filter(p=>p.qty>(p.min||0));
-  const exits = movs.filter(m=>m.t==='s'||m.t==='epi');
+  const exits = movs.filter(m=>(m.t==='s'||m.t==='epi')&&!m.canc);
   const lastExitByProd = {};
   exits.forEach(m=>{ if(m.pid&&(!lastExitByProd[m.pid]||m.d>lastExitByProd[m.pid])) lastExitByProd[m.pid]=m.d; });
   const parados = prods.filter(p=>p.qty>0).map(p=>({
@@ -5713,10 +5665,11 @@ function renderEpis(){
   document.getElementById('epi-filter').innerHTML='<option value="">Todos os itens</option>'+nomes.map(n=>`<option value="${h(n)}">${h(n)}</option>`).join('');
   document.getElementById('epi-filter').value=prev;
 
-  if(per>0&&!epiDatasAtivas()) list=list.filter(m=>inPeriod(m.d,daysAgoStr(per),''));
+  const ef=(document.getElementById('e-from')||{}).value||'', et=(document.getElementById('e-to')||{}).value||'';
+  if(ef||et) list=list.filter(m=>inPeriod(m.d,ef,et)); else if(per>0) list=list.filter(m=>inPeriod(m.d,daysAgoStr(per),''));
+  list=filtrosV2(list,'e');
   if(q.trim()) list=list.filter(m=>matchTokens(movHaystack(m),q));
   if(filtro) list=list.filter(m=>m.pn===filtro);
-  list=epiExtra(list);
   list=movSort(list,false);
 
   const {slice,total,page,totalPages}=paginate(list,'epis');
@@ -5916,7 +5869,7 @@ function renderDash(){
 
   /* últimos 7 dias */
   const from=daysAgoStr(7);
-  const rec=t=>movs.filter(m=>m.t===t&&inPeriod(m.d,from,''));
+  const rec=t=>movs.filter(m=>m.t===t&&!m.canc&&inPeriod(m.d,from,''));
   const set=(idA,idB,arr,lbl)=>{
     const el=document.getElementById(idA); if(el) el.textContent=arr.length;
     const s=document.getElementById(idB);
@@ -6088,7 +6041,7 @@ function repClearAll(){
 function repFilters(){
   const g=id=>((document.getElementById(id)||{}).value||'').trim();
   return {from:g('r-from'),to:g('r-to'),type:g('r-type'),colab:g('r-colab'),
-    item:g('r-item'),obra:g('r-obra'),resp:g('r-resp'),cat:g('r-cat')};
+    item:g('r-item'),obra:(window.resolverObra&&resolverObra(g('r-obra'))||{name:g('r-obra')}).name,resp:g('r-resp'),cat:g('r-cat')};
 }
 /* Movimentações respeitando os filtros do painel. */
 function repMovs(forceType){
@@ -6097,9 +6050,9 @@ function repMovs(forceType){
   const tp=forceType||f.type;
   if(tp) list=list.filter(m=>m.t===tp);
   if(f.from||f.to) list=list.filter(m=>inPeriod(m.d,f.from,f.to));
-  if(f.colab) list=list.filter(m=>matchTokens(m.colab||'',f.colab));
+  if(f.colab){ const ex=db.colab().some(c=>norm(c.name)===norm(f.colab)); list=list.filter(m=>ex?norm(m.colab)===norm(f.colab):matchTokens(m.colab||'',f.colab)); }
   if(f.item) list=list.filter(m=>matchTokens((m.pn||'')+' '+movProdCode(m),f.item));
-  if(f.obra) list=list.filter(m=>matchTokens(m.ob||'',f.obra));
+  if(f.obra){ const ex=db.obras().some(o=>norm(o.name)===norm(f.obra))||db.movs().some(m=>norm(m.ob)===norm(f.obra)); list=list.filter(m=>ex?norm(m.ob)===norm(f.obra):matchTokens(m.ob||'',f.obra)); }
   if(f.resp) list=list.filter(m=>matchTokens(m.resp||'',f.resp));
   if(f.cat) list=list.filter(m=>matchTokens(movCat(m),f.cat));
   return movSort(list,false);
@@ -7080,14 +7033,14 @@ function renderHist(){
   if(dlm) dlm.innerHTML=[...new Set(db.prods().map(p=>p.name))].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(n=>`<option value="${h(n)}">`).join('');
 
   if(q.trim()) movs=movs.filter(m=>matchTokens(movHaystack(m),q));
-  if(mat.trim()) movs=movs.filter(m=>matchTokens((m.pn||'')+' '+movProdCode(m),mat));
+  if(mat.trim()){ const ex=db.prods().some(p=>p.name===mat); movs=movs.filter(m=>ex?m.pn===mat:matchTokens((m.pn||'')+' '+movProdCode(m),mat)); }
+  movs=filtrosV2(movs,'h');
   if(type==='entrada') movs=movs.filter(m=>m.t==='e');
   else if(type==='saida') movs=movs.filter(m=>m.t==='s');
   else if(type==='epi') movs=movs.filter(m=>m.t==='epi');
   else if(type==='aj') movs=movs.filter(m=>m.t==='aj');
   else if(type==='est') movs=movs.filter(m=>m.t==='est');
   if(from||to) movs=movs.filter(m=>inPeriod(m.d,from,to));
-  movs=histExtra(movs);
   movs=movSort(movs,histAsc);
 
   const {slice,total,page,totalPages}=paginate(movs,'history');
@@ -7119,14 +7072,14 @@ function histFiltered(){
   const mat=((document.getElementById('h-mat')||{}).value)||'';
   const from=document.getElementById('h-from').value, to=document.getElementById('h-to').value;
   if(q.trim()) movs=movs.filter(m=>matchTokens(movHaystack(m),q));
-  if(mat.trim()) movs=movs.filter(m=>matchTokens((m.pn||'')+' '+movProdCode(m),mat));
+  if(mat.trim()){ const ex=db.prods().some(p=>p.name===mat); movs=movs.filter(m=>ex?m.pn===mat:matchTokens((m.pn||'')+' '+movProdCode(m),mat)); }
+  movs=filtrosV2(movs,'h');
   if(type==='entrada') movs=movs.filter(m=>m.t==='e');
   else if(type==='saida') movs=movs.filter(m=>m.t==='s');
   else if(type==='epi') movs=movs.filter(m=>m.t==='epi');
   else if(type==='aj') movs=movs.filter(m=>m.t==='aj');
   else if(type==='est') movs=movs.filter(m=>m.t==='est');
   if(from||to) movs=movs.filter(m=>inPeriod(m.d,from,to));
-  movs=histExtra(movs);
   return movSort(movs,false);
 }
 function exportHistCSV(){
@@ -7164,7 +7117,7 @@ function renderDash(){
   document.getElementById('k-obras').textContent=obras.filter(o=>o.status==='ativa').length;
 
   const from=daysAgoStr(7);
-  const rec=t=>movs.filter(m=>m.t===t&&inPeriod(m.d,from,''));
+  const rec=t=>movs.filter(m=>m.t===t&&!m.canc&&inPeriod(m.d,from,''));
   const set=(idA,idB,arr,lbl)=>{
     const el=document.getElementById(idA); if(el) el.textContent=arr.length;
     const s=document.getElementById(idB);
@@ -8722,495 +8675,240 @@ async function aplicarCancelamento(id,o){
 }
 
 /* ── Interface: busca/cadastro na entrega ── */
+W._rt={atomicSave,syncMany,_up,_del};
 const pq=$('d-prod-q');
 if(pq){ pq.addEventListener('input',entregaBuscaItens); pq.addEventListener('focus',entregaBuscaItens); }
 try{ reconcileCanc(); }catch(e){}
 })();
 
+
 /* ═══════════════════════════════════════════════════════════════
-   MELHORIAS v12 — Centros de Custo / Obras integrados, filtros
-   completos, consumo correto no dashboard e avisos de fluxo.
-   (Bloco incremental: não remove nada; só sobrescreve funções citadas.)
+   MELHORIAS v12 — Centro de Custo / Obras, obra na entrega,
+   filtros combinados e proteção contra entrada duplicada.
    ═══════════════════════════════════════════════════════════════ */
 (function(){
-const W=window, $=id=>document.getElementById(id);
-const PEND12='rt_sync_pending';
+const W=window, $=id=>document.getElementById(id), R=()=>W._rt;
+const obraAtiva=o=>(o.status||'ativa')==='ativa';
+const obraLabel=o=>(o.code?o.code+' - ':'')+o.name;
+W.obraLabel=obraLabel;
+const sameObra=(m,o)=>{ const k=norm(m.ob||m.obra); return !!k&&(k===norm(o.name)||k===norm(obraLabel(o))); };
+const movsObra=o=>db.movs().filter(m=>(m.t==='s'||m.t==='epi')&&!m.canc&&sameObra(m,o));
+const obraTemHist=o=>db.movs().some(m=>sameObra(m,o))||db.epis().some(e=>sameObra({ob:e.obra},o));
+W.resolverObra=resolverObra;
+function resolverObra(v){ const k=norm(v); if(!k) return null;
+  return db.obras().find(o=>norm(obraLabel(o))===k||norm(o.name)===k||(o.code&&norm(o.code)===k))||null; }
 
-/* ── utilidades ── */
-function saveAll(entries){                       /* gravação local atômica (tudo ou nada) */
-  const snap=entries.map(e=>localStorage.getItem(e[0]));
-  try{ entries.forEach(e=>localStorage.setItem(e[0],JSON.stringify(e[1]))); return true; }
-  catch(err){ entries.forEach((e,i)=>{ try{ snap[i]==null?localStorage.removeItem(e[0]):localStorage.setItem(e[0],snap[i]); }catch(_){} }); return false; }
-}
-async function syncRows(table,rows){             /* resultado real da sincronização */
-  if(!rows||!rows.length) return {ok:true};
-  if(!syncOnline){ try{localStorage.setItem(PEND12,'1')}catch(e){} return {ok:true,skipped:true}; }
-  try{
-    const r=await supaUpsert(table,rows);
-    if(r&&r.ok===false){ try{localStorage.setItem(PEND12,'1')}catch(e){} return {ok:false,err:String((r.errors||[''])[0])}; }
-    return {ok:true};
-  }catch(e){ try{localStorage.setItem(PEND12,'1')}catch(_){} return {ok:false,err:e.message}; }
-}
-const avisoSync=(r,what)=>{ if(r&&r.ok===false) toast('⚠ '+what+' salvo neste aparelho, mas NÃO foi gravado no banco. Use “Sincronizar”.','error'); };
-const numCmp=(a,b)=>String(a).localeCompare(String(b),'pt-BR',{numeric:true,sensitivity:'base'});
-
-/* ═══════════ OBRAS: rótulo, status e vínculo com o histórico ═══════════ */
-const ST_OBRA={ativa:'Ativa',pausada:'Pausada',concluida:'Concluída',inativa:'Inativa'};
-W.obraLabel=o=>{ const c=String(o.code||'').trim(), n=String(o.name||'').trim(); return c?(c+' - '+n):n; };
-const obraSt=o=>o.status||'ativa';
-W.obraSelecionavel=o=>obraSt(o)==='ativa';
-const obrasOrd=l=>l.slice().sort((a,b)=>numCmp(obraLabel(a),obraLabel(b)));
-W.obrasAtivas=()=>obrasOrd(db.obras().filter(obraSelecionavel));
-
-/* Mapa texto→obra. O rótulo "030 - NOME" tem prioridade; o nome puro (lançamentos
-   antigos) só vale quando é único, para nunca atribuir histórico à obra errada. */
-function obraMapa(obras){
-  obras=obras||db.obras();
-  const porLabel={}, porNome={}, contNome={};
-  obras.forEach(o=>{ porLabel[norm(obraLabel(o))]=o; const n=norm(o.name); contNome[n]=(contNome[n]||0)+1; porNome[n]=o; });
-  return txt=>{ const v=norm(txt||''); if(!v) return null; return porLabel[v]||(contNome[v]===1?porNome[v]:null); };
-}
-W.obraDe=(m,mapa)=>(mapa||obraMapa())(m.ob);
-const movConsome=m=>(m.t==='s')||(m.t==='epi'&&!m.canc);   /* o que conta como consumo da obra */
-
-function obraStats(){
-  const mapa=obraMapa(), st={};
-  db.obras().forEach(o=>{ st[o.id]={qtd:0,entregas:new Set(),saidas:0,itens:new Set(),colabs:new Set()}; });
-  db.movs().forEach(m=>{
-    if(!movConsome(m)) return;
-    const o=mapa(m.ob); if(!o) return; const s=st[o.id];
-    s.qtd+=Number(m.q)||0; s.itens.add(m.pid||m.pn);
-    if(m.t==='epi'){ s.entregas.add(m.grp||m.id); if(m.colab) s.colabs.add(norm(m.colab)); } else s.saidas++;
-  });
-  return st;
-}
-function obraTemHistorico(o){
-  const mapa=obraMapa();
-  return db.movs().some(m=>m.ob&&mapa(m.ob)&&mapa(m.ob).id===o.id)
-      || db.epis().some(e=>e.obra&&mapa(e.obra)&&mapa(e.obra).id===o.id);
-}
-
-/* ═══════════ SELETOR DE OBRA (busca por código ou nome) ═══════════ */
-function pickerObra(inputId){
-  const inp=$(inputId); if(!inp||inp._pk) return; inp._pk=true;
-  const box=$(inputId+'-list');
-  const render=()=>{
-    const q=inp.value.trim(), ativas=obrasAtivas();
-    const res=(q?ativas.filter(o=>matchTokens([obraLabel(o),o.cliente].filter(Boolean).join(' '),q)):ativas).slice(0,30);
-    if(!ativas.length){
-      box.innerHTML='<div class="ac-empty">Nenhuma obra ativa cadastrada.<br><button type="button" class="btn btn-primary btn-xs" style="margin-top:8px" onmousedown="event.preventDefault();novaObraDe(\''+inputId+'\')">+ Cadastrar obra</button></div>';
-    }else box.innerHTML=res.length
-      ? res.map(o=>'<div class="ac-item" data-id="'+h(o.id)+'"><div><div class="ac-n">'+h(obraLabel(o))+'</div>'+(o.cliente?'<div class="ac-s">'+h(o.cliente)+'</div>':'')+'</div></div>').join('')
-      : '<div class="ac-empty">Nenhuma obra ativa encontrada para “'+h(q)+'”.<br><button type="button" class="btn btn-primary btn-xs" style="margin-top:8px" onmousedown="event.preventDefault();novaObraDe(\''+inputId+'\')">+ Cadastrar nova obra</button></div>';
-    box.classList.add('open');
-  };
-  const escolhe=id=>{ const o=db.obras().find(x=>x.id===id); if(!o) return; inp.value=obraLabel(o); box.classList.remove('open'); atualizaNotaObra(inputId); };
-  inp.addEventListener('input',render); inp.addEventListener('focus',render);
-  inp.addEventListener('keydown',ev=>{
-    if(ev.key==='Escape') box.classList.remove('open');
-    if(ev.key==='Enter'){ const it=box.querySelector('.ac-item'); if(it&&box.classList.contains('open')){ ev.preventDefault(); escolhe(it.dataset.id); } }
-  });
-  box.addEventListener('mousedown',ev=>{ const it=ev.target.closest('.ac-item'); if(it){ ev.preventDefault(); escolhe(it.dataset.id); } });
-  let tmr=null;
-  inp.addEventListener('focus',()=>{ clearTimeout(tmr); });
-  inp.addEventListener('input',()=>{ clearTimeout(tmr); });
-  inp.addEventListener('blur',()=>{ clearTimeout(tmr); tmr=setTimeout(()=>{ if(document.activeElement!==inp) box.classList.remove('open'); },150); });
-}
-function atualizaNotaObra(inputId){
-  const nt=$(inputId+'-note'); if(!nt) return;
-  const n=obrasAtivas().length, v=validaObra(inputId,true);
-  if(!n) nt.textContent='Nenhuma obra cadastrada ainda. Cadastre em “+ Nova obra” ou na aba Centros de Custo / Obras.';
-  else if(v.obra) nt.innerHTML='✓ <strong>'+h(obraLabel(v.obra))+'</strong>';
-  else nt.textContent=n+' obra(s) ativa(s). Digite o código ou o nome e escolha na lista.';
-}
-/* Valida o campo de obra. Com obras cadastradas, a escolha é obrigatória e precisa ser de uma obra ativa. */
-function validaObra(inputId,silencioso){
-  const inp=$(inputId), v=norm(inp.value), ativas=obrasAtivas();
-  if(!ativas.length) return {ok:true,obra:null};
-  if(!v) return {ok:false,msg:'Selecione a obra ou centro de custo.'};
-  let c=ativas.filter(o=>norm(obraLabel(o))===v);
-  if(!c.length) c=ativas.filter(o=>norm(o.name)===v||(o.code&&norm(o.code)===v));
-  if(c.length===1){ if(!silencioso) inp.value=obraLabel(c[0]); return {ok:true,obra:c[0]}; }
-  return {ok:false,msg:c.length>1?'Há mais de uma obra com esse nome. Escolha pelo código na lista.'
-    :'“'+inp.value.trim()+'” não é uma obra ativa cadastrada. Escolha uma da lista ou use “+ Nova obra”.'};
-}
-W.novaObraDe=function(inputId){
-  const nome=$(inputId).value.trim();
-  $(inputId+'-list').classList.remove('open');
-  W._afterObraSave=o=>{ $(inputId).value=obraLabel(o); atualizaNotaObra(inputId); };
-  openObraModal();
-  if(nome&&!/^\d+\s*-\s*$/.test(nome)) $('o-name').value=nome;
-  setTimeout(()=>$('o-code').focus(),100);
-};
-document.addEventListener('click',ev=>{ if(!ev.target.closest('.ac-wrap')) document.querySelectorAll('#d-obra-list,#x-obra-list').forEach(b=>b.classList.remove('open')); });
-pickerObra('d-obra'); pickerObra('x-obra');
-['d-obra','x-obra'].forEach(id=>{ const e=$(id); if(e) e.addEventListener('input',()=>atualizaNotaObra(id)); });
-
-/* ── Entrega: obra obrigatória, responsável lembrado ── */
-const _openEntrega12=openEntregaModal;
-W.openEntregaModal=function(pref){
-  _openEntrega12(pref);
-  $('d-obra').value=''; atualizaNotaObra('d-obra');
-  try{ const r=localStorage.getItem('rt_last_resp'); if(r&&!$('d-resp').value) $('d-resp').value=r; }catch(e){}
-};
-const _confirmEntrega12=confirmEntrega;
-W.confirmEntrega=function(){
-  if(entregaCtx.colab&&coletaEntregaItens().length){
-    const v=validaObra('d-obra'); if(!v.ok) return feedbackErro(v.msg);
-    try{ const r=$('d-resp').value.trim(); if(r) localStorage.setItem('rt_last_resp',r); }catch(e){}
+/* ── Aba Centro de Custo / Obras ── */
+W.renderObras=function(){
+  const q=($('ob-q')||{}).value||'', st=($('ob-st')||{}).value||'ativas';
+  let obras=db.obras().slice().sort((a,b)=>String(a.code||'').localeCompare(String(b.code||''),'pt-BR',{numeric:true})||a.name.localeCompare(b.name,'pt-BR'));
+  const todas=obras.length;
+  if(st==='ativas') obras=obras.filter(obraAtiva); else if(st==='inativas') obras=obras.filter(o=>!obraAtiva(o));
+  if(q.trim()) obras=obras.filter(o=>matchTokens([o.code,o.name,o.cliente,o.resp].filter(Boolean).join(' '),q));
+  const tb=$('obras-body'); const {slice,total,page,totalPages}=paginate(obras,'obras');
+  if(!obras.length){
+    tb.innerHTML=`<tr class="empty-row"><td colspan="7">${todas?'Nenhuma obra encontrada com estes filtros.':'Nenhuma obra cadastrada.<br><span style="font-size:.78rem">Use <strong>Nova Obra</strong> ou <strong>Importar lista</strong> para colar os códigos oficiais (ex.: 030 - NOME DA OBRA).</span>'}</td></tr>`;
+    renderPager('obras',0,1,1,'pager-obras'); return;
   }
-  return _confirmEntrega12.apply(this,arguments);
+  const idx={}; db.movs().forEach(m=>{ if((m.t==='s'||m.t==='epi')&&!m.canc){ const k=norm(m.ob); (idx[k]=idx[k]||[]).push(m); } });
+  tb.innerHTML=slice.map(o=>{
+    const ms=(idx[norm(o.name)]||[]).concat(o.code?(idx[norm(obraLabel(o))]||[]):[]);
+    const ret=ms.reduce((a,m)=>a+(Number(m.q)||0),0), at=obraAtiva(o);
+    return `<tr${at?'':' style="opacity:.65"'}>
+      <td data-label="Código" style="font-family:'Poppins',sans-serif;font-weight:600;color:#1565c0">${h(o.code)||'—'}</td>
+      <td class="td-main" data-label="Nome" style="color:#0d2240;font-weight:500">${h(o.name)}</td>
+      <td data-label="Cliente" style="color:#2c5282">${h(o.cliente)||'—'}</td>
+      <td data-label="Responsável" style="color:#2c5282">${h(o.resp)||'—'}</td>
+      <td data-label="Status"><span class="badge badge-${h(o.status||'ativa')}">${at?'Ativa':h(o.status==='inativa'?'Inativa':o.status==='concluida'?'Concluída':o.status)}</span></td>
+      <td data-label="Materiais retirados" style="color:#1565c0;font-weight:700">${fmtQ(ret)} un. <span style="font-weight:400;font-size:.7rem;color:#6b8cae">(${ms.length} lanç.)</span></td>
+      <td class="td-acts"><div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap">
+        <button class="btn btn-sync btn-xs" onclick="openObraDetalhe('${h(o.id)}')">Consumo</button>
+        <button class="btn btn-ghost btn-xs" onclick="openObraModal('${h(o.id)}')">Editar</button>
+        <button class="btn btn-ghost btn-xs" onclick="setObraStatus('${h(o.id)}','${at?'inativa':'ativa'}')">${at?'Inativar':'Reativar'}</button>
+        <button class="btn btn-ghost btn-xs" style="color:#b91c1c" onclick="delObra('${h(o.id)}')">Excluir</button>
+      </div></td></tr>`;
+  }).join('');
+  renderPager('obras',total,page,totalPages,'pager-obras');
 };
-/* ── Saída (consumo direto em obra, sem colaborador) ── */
-const _openExit12=openExitModal;
-W.openExitModal=function(){ _openExit12.apply(this,arguments); $('x-obra').value=''; atualizaNotaObra('x-obra'); };
-const _saveExit12=saveExit;
-W.saveExit=function(){
-  if($('x-prod').value&&(parseFloat(String($('x-qty').value).replace(',','.'))||0)>0){
-    const v=validaObra('x-obra'); if(!v.ok) return feedbackErro(v.msg);
-  }
-  return _saveExit12.apply(this,arguments);
-};
-
-/* ── Entrada: aviso de possível lançamento duplicado (mesmo item + mesma NF) ── */
-const _saveEntry12=saveEntry;
-W.saveEntry=function(force){
-  const pid=$('e-prod').value, nf=$('e-nf').value.trim();
-  if(force!==true&&pid&&nf){
-    const dup=db.movs().filter(m=>m.t==='e'&&m.pid===pid&&norm(m.nf)===norm(nf));
-    if(dup.length){
-      const p=findProd(pid);
-      return opConfirm('Possível entrada duplicada',
-        '<div style="line-height:1.7">Já existe <strong>'+dup.length+'</strong> entrada de <strong>'+h(p?p.name:'este item')+'</strong> com o documento <strong>'+h(nf)+'</strong> (último lançamento: '+fmtDT(dup[dup.length-1].d)+', '+fmtQ(dup[dup.length-1].q)+').<br>Cada recebimento deve aumentar o estoque <strong>uma única vez</strong>. Se for outro recebimento do mesmo documento, pode prosseguir.</div>',
-        ()=>{ closeOpConf(); W.saveEntry(true); },'Lançar mesmo assim','btn-danger');
-    }
-  }
-  return _saveEntry12.apply(this,arguments);
-};
-
-/* ═══════════ CADASTRO DE OBRAS / CENTROS DE CUSTO ═══════════ */
-const _openObra12=openObraModal;
-W.openObraModal=function(id){
-  _openObra12(id);
-  const st=$('o-status'); if(st&&!st.querySelector('option[value="inativa"]')) st.insertAdjacentHTML('beforeend','<option value="inativa">Inativa (encerrada)</option>');
-  if(id){ const o=db.obras().find(x=>x.id===id); if(o) st.value=obraSt(o); }
-  if(!id) W._afterObraSave=W._afterObraSave||null;
-};
-const _closeObra12=closeObraModal;
-W.closeObraModal=function(){ _closeObra12(); if(!W._obraSaving) W._afterObraSave=null; };
-
-W.saveObra=async function(){
-  const id=$('o-id').value, name=$('o-name').value.trim().replace(/\s+/g,' '), code=$('o-code').value.trim();
-  if(!name) return feedbackErro('Informe o nome da obra.');
-  const data={code,name,cliente:$('o-cliente').value.trim(),resp:$('o-resp').value.trim(),status:$('o-status').value||'ativa',obs:$('o-obs').value.trim()};
-  const obras=db.obras();
-  const lbl=norm(obraLabel(data));
-  const dup=obras.find(x=>x.id!==id&&((code&&norm(x.code)===norm(code))||norm(obraLabel(x))===lbl));
-  if(dup) return feedbackErro(code&&norm(dup.code)===norm(code)?('Já existe uma obra com o código “'+code+'”: '+obraLabel(dup)+'.'):('Já existe a obra “'+obraLabel(dup)+'”.'));
-  let movsAlt=[], episAlt=[], obraAlt;
-  const movs=db.movs(), epis=db.epis();
-  if(id){
-    const i=obras.findIndex(x=>x.id===id); if(i<0) return;
-    const antes=obras[i], mapa=obraMapa(obras), labelAntes=obraLabel(antes);
-    obras[i]={...antes,...data}; obraAlt=obras[i];
-    const novoLabel=obraLabel(obraAlt);
-    if(norm(labelAntes)!==norm(novoLabel)){            /* mantém o histórico vinculado após renomear */
-      movs.forEach(m=>{ if(m.ob&&mapa(m.ob)&&mapa(m.ob).id===id){ m.ob=novoLabel; movsAlt.push(m); } });
-      epis.forEach(e=>{ if(e.obra&&mapa(e.obra)&&mapa(e.obra).id===id){ e.obra=novoLabel; episAlt.push(e); } });
-    }
-  }else{
-    obraAlt={id:uid(),...data}; obras.push(obraAlt);
-    /* histórico antigo com o mesmo nome passa a ser reconhecido (nome único) — sem reescrever textos */
-  }
-  if(!saveAll([[K.o,obras],[K.m,movs],[K.e,epis]])) return feedbackErro('Não foi possível gravar no navegador. Nada foi alterado.');
-  W._obraSaving=true; const hook=W._afterObraSave; W._afterObraSave=null; closeObraModal(); W._obraSaving=false;
-  refreshAll();
-  toast(id?('Obra atualizada'+(movsAlt.length?' — '+movsAlt.length+' lançamento(s) do histórico acompanharam o novo nome.':'.')):'Obra cadastrada.','success');
-  if(hook){ try{ hook(obraAlt); }catch(e){ console.warn(e); } }
-  const rs=await Promise.all([syncRows('obras',[rowObra(obraAlt)]),syncRows('movements',movsAlt.map(rowMovement)),syncRows('epi_deliveries',episAlt.map(rowEpi))]);
-  rs.forEach(r=>avisoSync(r,'A obra'));
-};
-
 W.setObraStatus=async function(id,status){
-  const obras=db.obras(), i=obras.findIndex(x=>x.id===id); if(i<0) return;
-  obras[i].status=status;
-  if(!saveAll([[K.o,obras]])) return feedbackErro('Não foi possível gravar no navegador.');
-  refreshAll();
-  toast(status==='ativa'?'Obra reativada.':'Obra inativada — o histórico foi mantido.',status==='ativa'?'success':'warning');
-  avisoSync(await syncRows('obras',[rowObra(obras[i])]),'A obra');
-};
-W.toggleObraAtiva=function(id){
-  const o=db.obras().find(x=>x.id===id); if(!o) return;
-  if(obraSelecionavel(o)) opConfirm('Inativar obra',
-    '<div style="line-height:1.8">Inativar <strong>'+h(obraLabel(o))+'</strong>?<br>Ela deixa de aparecer para novas entregas e saídas. Todo o histórico e os relatórios continuam preservados.</div>',
-    ()=>{ closeOpConf(); setObraStatus(id,'inativa'); },'Inativar obra','btn-danger');
-  else setObraStatus(id,'ativa');
+  const l=db.obras(), i=l.findIndex(o=>o.id===id); if(i<0) return;
+  l[i].status=status; db.sO(l); refreshAll();
+  const r=await R()._up('obras',rowObra(l[i]));
+  toast(status==='ativa'?'Obra reativada.':'Obra inativada — o histórico foi mantido.'+(r.ok===false?' ⚠ Falha ao sincronizar.':''),r.ok===false?'warning':'success');
 };
 W.delObra=function(id){
   const o=db.obras().find(x=>x.id===id); if(!o) return;
-  if(obraTemHistorico(o)){
-    return opConfirm('Obra com histórico',
-      '<div style="line-height:1.8"><strong>'+h(obraLabel(o))+'</strong> possui entregas/saídas registradas e <strong>não pode ser excluída</strong>.<br>Ela será <strong>inativada</strong>: some das novas entregas, mas o histórico continua completo.</div>',
+  if(obraTemHist(o)){
+    if(!obraAtiva(o)) return toast('Esta obra já está inativa e possui histórico, por isso não pode ser excluída.','info');
+    return opConfirm('Obra com histórico',`<div style="line-height:1.8"><strong>${h(obraLabel(o))}</strong> possui entregas/saídas registradas e <strong>não pode ser excluída</strong>.<br>Ela será <strong>inativada</strong>: deixa de aparecer nas novas entregas e o histórico é mantido.</div>`,
       ()=>{ closeOpConf(); setObraStatus(id,'inativa'); },'Inativar obra','btn-danger');
   }
-  opConfirm('Excluir obra','<div style="line-height:1.8"><strong>'+h(obraLabel(o))+'</strong> nunca foi usada.<br>A exclusão é definitiva.</div>',
-    async ()=>{ closeOpConf();
-      if(!saveAll([[K.o,db.obras().filter(x=>x.id!==id)]])) return feedbackErro('Não foi possível gravar no navegador.');
-      refreshAll(); toast('Obra excluída.','warning');
-      if(syncOnline){ try{ const r=await fetch(SUPA_URL+'/obras?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:SUPA_HDR}); if(!r.ok) toast('⚠ Excluída aqui, mas a exclusão no banco FALHOU — ela pode reaparecer ao atualizar.','error'); }catch(e){ toast('⚠ Excluída aqui, mas sem conexão para excluir no banco.','error'); } }
-      else localStorage.setItem(PEND12,'1');
-    },'Excluir definitivamente','btn-danger');
+  opConfirm('Excluir obra',`<div style="line-height:1.8"><strong>${h(obraLabel(o))}</strong> não possui nenhum lançamento.<br>A exclusão é definitiva.</div>`,
+    async ()=>{ closeOpConf(); db.sO(db.obras().filter(x=>x.id!==id)); refreshAll(); toast('Obra excluída.','warning'); await R()._del('obras',id,'Obra'); },'Excluir definitivamente','btn-danger');
 };
-
-/* Lista de obras: busca, situação, consumo e ações */
-W.renderObras=function(){
-  const q=($('ob-search')||{}).value||'', fs=($('ob-status')||{}).value||'ativas';
-  const st=obraStats(); let list=db.obras();
-  if(q.trim()) list=list.filter(o=>matchTokens([obraLabel(o),o.cliente,o.resp].filter(Boolean).join(' '),q));
-  if(fs==='ativas') list=list.filter(o=>obraSt(o)==='ativa'||obraSt(o)==='pausada');
-  else if(fs==='inativas') list=list.filter(o=>obraSt(o)==='inativa'||obraSt(o)==='concluida');
-  list=obrasOrd(list);
-  const {slice,total,page,totalPages}=paginate(list,'obras');
-  const tb=$('obras-body');
-  if(!slice.length){
-    tb.innerHTML='<tr class="empty-row"><td colspan="8">'+(db.obras().length?'Nenhuma obra encontrada com os filtros atuais.':'Nenhuma obra cadastrada ainda.<br><span style="font-size:.78rem">Use <strong>Nova Obra</strong> ou <strong>Importar lista</strong> para cadastrar os códigos oficiais.</span>')+'</td></tr>';
-    renderPager('obras',0,1,1,'pager-obras'); renderObrasLegado(); return;
-  }
-  const ic={edit:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>',
-            del:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>'};
-  tb.innerHTML=slice.map(o=>{
-    const s=st[o.id]||{qtd:0,entregas:new Set()}, inat=!obraSelecionavel(o);
-    return '<tr class="'+(inat?'row-inativo':'')+'">'
-     +'<td data-label="Código" style="font-family:\'Poppins\',sans-serif;font-weight:600;color:#1565c0">'+(h(o.code)||'—')+'</td>'
-     +'<td class="td-main" data-label="Nome" style="color:#0d2240;font-weight:500;cursor:pointer" onclick="openObraDet(\''+h(o.id)+'\')" title="Ver consumo desta obra">'+h(o.name)+'</td>'
-     +'<td data-label="Cliente" style="color:#2c5282">'+(h(o.cliente)||'—')+'</td>'
-     +'<td data-label="Responsável" style="color:#2c5282">'+(h(o.resp)||'—')+'</td>'
-     +'<td data-label="Situação"><span class="badge badge-'+h(obraSt(o))+'">'+(ST_OBRA[obraSt(o)]||h(obraSt(o)))+'</span></td>'
-     +'<td data-label="Entregas" style="color:#2c5282;font-weight:600">'+s.entregas.size+'</td>'
-     +'<td data-label="Qtd. consumida" style="color:#1565c0;font-weight:700">'+fmtQ(s.qtd)+'</td>'
-     +'<td class="td-acts"><div style="display:flex;gap:5px;justify-content:flex-end">'
-       +'<button class="icon-btn" title="Ver consumo, entregas e colaboradores" onclick="openObraDet(\''+h(o.id)+'\')">📊</button>'
-       +'<button class="icon-btn e" title="Editar" onclick="openObraModal(\''+h(o.id)+'\')">'+ic.edit+'</button>'
-       +'<button class="icon-btn" title="'+(inat?'Reativar obra':'Inativar obra')+'" onclick="toggleObraAtiva(\''+h(o.id)+'\')">'+(inat?'↺':'⏻')+'</button>'
-       +'<button class="icon-btn d" title="Excluir (somente sem histórico)" onclick="delObra(\''+h(o.id)+'\')">'+ic.del+'</button>'
-     +'</div></td></tr>';
-  }).join('');
-  renderPager('obras',total,page,totalPages,'pager-obras');
-  renderObrasLegado();
+const _saveObra0=saveObra;
+W.saveObra=function(){
+  const id=$('o-id').value, name=$('o-name').value.trim(), code=$('o-code').value.trim();
+  if(!name) return _saveObra0();
+  const outras=db.obras().filter(o=>o.id!==id);
+  const dc=code&&outras.find(o=>norm(o.code)===norm(code)), dn=outras.find(o=>norm(o.name)===norm(name));
+  if(dc) return feedbackErro(`Já existe o centro de custo ${obraLabel(dc)} com este código.`);
+  if(dn) return feedbackErro(`Já existe uma obra chamada “${dn.name}”.`);
+  const atual=id?db.obras().find(o=>o.id===id):null, velho=atual&&atual.name!==name?atual.name:null;
+  const antes=new Set(db.obras().map(o=>o.id)), hook=W._afterObraSave;
+  W._obraSaving=true; try{ _saveObra0(); } finally{ W._obraSaving=false; }
+  const salvo=db.obras().find(o=>id?o.id===id:!antes.has(o.id)); if(!salvo) return;
+  R()._up('obras',rowObra(salvo)).then(r=>{ if(r.ok===false) toast('⚠ Obra salva neste aparelho, mas NÃO gravada no banco. Use “Sincronizar”.','error'); });
+  if(velho) renomearObraHist(velho,name);
+  if(!id&&hook){ W._afterObraSave=null; try{ hook(salvo); }catch(e){} }
+  refreshAll();
 };
-W.obrasLimpar=function(){ $('ob-search').value=''; $('ob-status').value='ativas'; pages['obras']=1; renderObras(); };
-
-/* Destinos digitados à mão no passado, ainda sem cadastro: ficam visíveis para serem cadastrados */
-function renderObrasLegado(){
-  const box=$('ob-legado'); if(!box) return;
-  const mapa=obraMapa(), g={};
-  db.movs().forEach(m=>{ if(!m.ob||!movConsome(m)||mapa(m.ob)) return; const k=norm(m.ob); (g[k]=g[k]||{txt:m.ob,qtd:0,n:0}); g[k].qtd+=Number(m.q)||0; g[k].n++; });
-  const l=Object.values(g).sort((a,b)=>b.n-a.n);
-  window._obLegado=l.map(x=>x.txt);
-  box.innerHTML=l.length?('<div class="cc-aviso"><div class="cc-av-ico">🗂️</div><div style="flex:1"><div class="cc-av-t">'+l.length+' destino(s) lançado(s) sem cadastro de obra</div>'
-    +'<div class="cc-av-d">Foram digitados à mão antes desta tela. Cadastre-os para que apareçam no consumo por obra (o histórico não é alterado).</div>'
-    +'<div class="chips" style="margin-top:8px">'+l.slice(0,12).map((x,i)=>'<button class="chip" onclick="cadastrarLegado('+i+')">'+h(x.txt)+' · '+x.n+' lanç.</button>').join('')+(l.length>12?'<span style="font-size:.72rem;color:#6b8cae;align-self:center">+'+(l.length-12)+' outros</span>':'')+'</div></div></div>'):'';
+const _closeObra0=closeObraModal;
+W.closeObraModal=function(){ _closeObra0(); if(!W._obraSaving) W._afterObraSave=null; };
+async function renomearObraHist(velho,novo){
+  const k=norm(velho), movs=db.movs(), epis=db.epis(), cm=[], ce=[];
+  movs.forEach(m=>{ if(norm(m.ob)===k){ m.ob=novo; cm.push(m);} });
+  epis.forEach(e=>{ if(norm(e.obra)===k){ e.obra=novo; ce.push(e);} });
+  if(!cm.length&&!ce.length) return;
+  if(!R().atomicSave([[K.m,movs],[K.e,epis]])) return feedbackErro('Não foi possível atualizar o histórico da obra renomeada.');
+  refreshAll(); const r=await R().syncMany(null,cm,ce,null);
+  toast(`Nome da obra atualizado em ${cm.length} lançamento(s).`+(r.ok||r.skipped?'':' ⚠ Falha ao sincronizar.'),r.ok||r.skipped?'success':'warning');
 }
-W.cadastrarLegado=function(i){ const t=(window._obLegado||[])[i]; if(t==null) return; openObraModal(); $('o-name').value=t; setTimeout(()=>$('o-code').focus(),100); };
-
-/* ── Importar lista de obras (colar texto: "030 - COLGATE SBC", uma por linha) ── */
-function parseListaObras(txt){
-  const ok=[], ign=[], inv=[], vistos=new Set(), existentes=db.obras();
-  String(txt||'').split(/\r?\n/).forEach(raw=>{
-    const l=raw.trim(); if(!l) return;
-    let code='', name='', m;
-    if((m=/^([^\t;]+)[\t;]+(.+)$/.exec(l))){ code=m[1].trim(); name=m[2].trim(); }
-    else if((m=/^([A-Za-z0-9./]+)\s*[-–—:]\s*(.+)$/.exec(l))){ code=m[1].trim(); name=m[2].trim(); }
-    else { name=l; }
-    name=name.replace(/\s+/g,' ');
-    if(!name){ inv.push(l); return; }
-    const o={code,name}, lb=norm(obraLabel(o));
-    const jaExiste=existentes.some(x=>(code&&norm(x.code)===norm(code))||norm(obraLabel(x))===lb);
-    if(jaExiste||vistos.has(lb)||(code&&vistos.has('c:'+norm(code)))){ ign.push(obraLabel(o)); return; }
-    vistos.add(lb); if(code) vistos.add('c:'+norm(code)); ok.push(o);
-  });
-  return {ok,ign,inv};
+/* Importar lista oficial (colar "030 - NOME" por linha) */
+function parseObras(txt){
+  return txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const m=/^([A-Za-z0-9._\/]+)\s*(?:[-–—:\t]+)\s*(.+)$/.exec(l); return m?{code:m[1],name:m[2].trim()}:{code:'',name:l}; });
 }
-W.openObraLote=function(){ $('ol-txt').value=''; $('ol-prev').innerHTML=''; $('m-obra-lote').classList.add('open'); setTimeout(()=>$('ol-txt').focus(),100); };
-W.closeObraLote=function(){ $('m-obra-lote').classList.remove('open'); };
-W.previewObraLote=function(){
-  const r=parseListaObras($('ol-txt').value);
-  $('ol-prev').innerHTML=($('ol-txt').value.trim())?('<div class="ce-note ok"><strong>'+r.ok.length+'</strong> nova(s) para cadastrar'+(r.ign.length?' · <strong>'+r.ign.length+'</strong> já cadastrada(s) (serão ignoradas)':'')+(r.inv.length?' · <strong>'+r.inv.length+'</strong> linha(s) inválida(s)':'')+'</div>'
-    +(r.ok.length?'<div style="max-height:150px;overflow:auto;border:1px solid #c8d8f0;border-radius:8px;padding:6px 10px;font-size:.76rem;line-height:1.7">'+r.ok.slice(0,60).map(o=>h(obraLabel(o))).join('<br>')+(r.ok.length>60?'<br>…':'')+'</div>':'')):'';
+W.obraImpPreview=function(){
+  const itens=parseObras($('oi-text').value), ex=db.obras(), vistos=new Set(); let novos=0,dup=0;
+  const rows=itens.map(it=>{
+    const d=ex.some(o=>(it.code&&norm(o.code)===norm(it.code))||norm(o.name)===norm(it.name))||vistos.has(norm(it.code||it.name));
+    vistos.add(norm(it.code||it.name)); d?dup++:novos++; it.dup=d;
+    return `<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0;${d?'color:#96590a':''}"><span>${h(it.code||'—')} — ${h(it.name)}</span><span>${d?'já existe':'novo'}</span></div>`; });
+  $('oi-prev').innerHTML=itens.length?`<div style="font-size:.74rem;margin:8px 0;color:#2c5282"><strong>${novos}</strong> novo(s) · <strong>${dup}</strong> já cadastrado(s)/repetido(s) (serão ignorados)</div><div style="max-height:200px;overflow:auto;font-size:.76rem;border:1px solid #dbe6f5;border-radius:8px;padding:8px 10px">${rows.join('')}</div>`:'';
+  W._objImp=itens.filter(i=>!i.dup);
 };
-W.confirmarObraLote=async function(){
-  const r=parseListaObras($('ol-txt').value);
-  if(!r.ok.length) return feedbackErro('Nenhuma obra nova para cadastrar.');
-  const novas=r.ok.map(o=>({id:uid(),code:o.code,name:o.name,cliente:'',resp:'',status:'ativa',obs:''}));
-  if(!saveAll([[K.o,db.obras().concat(novas)]])) return feedbackErro('Não foi possível gravar no navegador. Nada foi cadastrado.');
-  closeObraLote(); refreshAll();
-  feedbackOK('Obras cadastradas.',novas.length+' obra(s) incluída(s).'+(r.ign.length?' '+r.ign.length+' já existia(m).':''));
-  avisoSync(await syncRows('obras',novas.map(rowObra)),'As obras');
+W.obraImpConfirmar=async function(){
+  obraImpPreview(); const novos=W._objImp||[]; if(!novos.length) return feedbackErro('Nenhuma obra nova para importar.');
+  const l=db.obras(), add=novos.map(i=>({id:uid(),code:i.code,name:i.name,cliente:'',resp:'',status:'ativa',obs:''}));
+  db.sO(l.concat(add)); $('m-obra-imp').classList.remove('open'); refreshAll();
+  feedbackOK('Obras importadas.',`${add.length} obra(s) cadastrada(s) como ativas.`);
+  const rs=await Promise.all(add.map(o=>R()._up('obras',rowObra(o))));
+  if(rs.some(r=>r.ok===false)) toast('⚠ Algumas obras não foram gravadas no banco. Use “Sincronizar”.','error');
 };
+W.openObraImp=function(){ $('oi-text').value=''; $('oi-prev').innerHTML=''; $('m-obra-imp').classList.add('open'); setTimeout(()=>$('oi-text').focus(),60); };
 
-/* ── Detalhe da obra: consumo, entregas, por período e colaborador ── */
-let obDet={id:null};
-W.openObraDet=function(id){
+/* Consumo por obra */
+W.openObraDetalhe=function(id){
+  W._obraDet=id; ['od-from','od-to','od-colab'].forEach(i=>$(i).value='');
   const o=db.obras().find(x=>x.id===id); if(!o) return;
-  obDet.id=id; $('od-title').textContent=obraLabel(o);
-  $('od-sub').textContent=[o.cliente,o.resp&&('Resp.: '+o.resp),ST_OBRA[obraSt(o)]].filter(Boolean).join(' · ');
-  ['od-from','od-to','od-item'].forEach(i=>$(i).value=''); $('od-colab').value='';
-  $('m-obra-det').classList.add('open'); renderObraDet();
+  $('od-title').textContent='Consumo — '+obraLabel(o);
+  $('od-colab').innerHTML='<option value="">Todos os colaboradores</option>'+[...new Set(movsObra(o).map(m=>m.colab).filter(Boolean))].sort().map(c=>`<option value="${h(c)}">${h(c)}</option>`).join('');
+  $('m-obra-det').classList.add('open'); renderObraDetalhe();
 };
-W.closeObraDet=function(){ $('m-obra-det').classList.remove('open'); };
 function obraDetMovs(){
-  const o=db.obras().find(x=>x.id===obDet.id); if(!o) return [];
-  const mapa=obraMapa(), from=$('od-from').value, to=$('od-to').value, col=$('od-colab').value, it=$('od-item').value.trim();
-  let l=db.movs().filter(m=>movConsome(m)&&mapa(m.ob)&&mapa(m.ob).id===o.id);
-  if(from||to) l=l.filter(m=>inPeriod(m.d,from,to));
-  if(col) l=l.filter(m=>norm(m.colab||m.resp)===norm(col));
-  if(it) l=l.filter(m=>matchTokens((m.pn||'')+' '+movProdCode(m),it));
-  return l;
+  const o=db.obras().find(x=>x.id===W._obraDet); if(!o) return {o:null,ms:[]};
+  let ms=movsObra(o); const f=$('od-from').value, t=$('od-to').value, c=$('od-colab').value;
+  if(f||t) ms=ms.filter(m=>inPeriod(m.d,f,t)); if(c) ms=ms.filter(m=>norm(m.colab)===norm(c));
+  return {o,ms:movSort(ms,false)};
 }
-W.renderObraDet=function(){
-  const o=db.obras().find(x=>x.id===obDet.id); if(!o) return;
-  /* lista de colaboradores da obra (mantém seleção) */
-  const mapa=obraMapa(), todos=db.movs().filter(m=>movConsome(m)&&mapa(m.ob)&&mapa(m.ob).id===o.id);
-  const nomes=[...new Set(todos.map(m=>m.colab||m.resp).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
-  const sel=$('od-colab'), prev=sel.value;
-  sel.innerHTML='<option value="">Todos os colaboradores</option>'+nomes.map(n=>'<option value="'+h(n)+'">'+h(n)+'</option>').join(''); sel.value=nomes.includes(prev)?prev:'';
-  const l=movSort(obraDetMovs(),false);
-  const qtd=l.reduce((a,m)=>a+(Number(m.q)||0),0);
-  const ents=new Set(l.filter(m=>m.t==='epi').map(m=>m.grp||m.id)).size;
-  const colabs=new Set(l.filter(m=>m.colab).map(m=>norm(m.colab))).size;
-  $('od-kpis').innerHTML=[['Qtd. consumida',fmtQ(qtd)],['Entregas',ents],['Saídas diretas',l.filter(m=>m.t==='s').length],['Colaboradores',colabs]]
-    .map(k=>'<div class="mini-kpi"><div class="mk-label">'+k[0]+'</div><div class="mk-value">'+k[1]+'</div></div>').join('');
-  const porItem={}; l.forEach(m=>{ const k=m.pn||'—'; (porItem[k]=porItem[k]||{q:0,n:0}); porItem[k].q+=Number(m.q)||0; porItem[k].n++; });
-  const its=Object.entries(porItem).sort((a,b)=>b[1].q-a[1].q);
-  $('od-itens').innerHTML=its.length?its.slice(0,40).map(x=>'<tr><td class="td-main" data-label="Item">'+h(x[0])+'</td><td data-label="Qtd" style="font-weight:700;color:#1565c0">'+fmtQ(x[1].q)+'</td><td data-label="Lançamentos">'+x[1].n+'</td></tr>').join('')
-    :'<tr class="empty-row"><td colspan="3">Nenhum consumo registrado com os filtros atuais.</td></tr>';
-  $('od-lanc').innerHTML=l.length?l.slice(0,200).map(m=>'<tr><td data-label="Data / Hora" style="white-space:nowrap;font-size:.76rem">'+fmtDT2(m.d)+'</td><td data-label="Tipo">'+(m.t==='epi'?'<span class="badge badge-epi">Entrega</span>':'<span class="badge badge-out">Saída</span>')+'</td><td class="td-main" data-label="Item">'+h(m.pn)+'</td><td data-label="Qtd" style="font-weight:700">'+fmtQ(m.q)+'</td><td data-label="Colaborador">'+(h(m.colab)||'—')+'</td><td data-label="Responsável">'+(h(m.resp)||'—')+'</td></tr>').join('')
-      +(l.length>200?'<tr><td colspan="6" style="text-align:center;color:#6b8cae;font-size:.74rem">Mostrando 200 de '+l.length+' — use os filtros ou exporte o CSV.</td></tr>':'')
-    :'<tr class="empty-row"><td colspan="6">Nenhum lançamento com os filtros atuais.</td></tr>';
+W.renderObraDetalhe=function(){
+  const {o,ms}=obraDetMovs(); if(!o) return;
+  const ag={}; ms.forEach(m=>{ const k=m.pid||m.pn, p=m.pid?findProd(m.pid):null; const a=ag[k]=ag[k]||{pn:m.pn,code:movProdCode(m),un:p?unitOf(p):'',q:0,n:0}; a.q+=Number(m.q)||0; a.n++; });
+  const lista=Object.values(ag).sort((a,b)=>b.q-a.q);
+  $('od-kpis').innerHTML=[['Itens diferentes',lista.length],['Lançamentos',ms.length],['Colaboradores',new Set(ms.map(m=>m.colab).filter(Boolean)).size]]
+    .map(([l,v])=>`<div style="flex:1;min-width:110px;border:1px solid #dbe6f5;border-radius:9px;padding:8px 12px"><div style="font-size:.66rem;color:#6b8cae">${l}</div><div style="font-size:1.15rem;font-weight:700;color:#0d2240">${v}</div></div>`).join('');
+  $('od-items').innerHTML=lista.length?lista.map(a=>`<tr><td>${h(a.pn)}</td><td>${h(a.code)}</td><td style="font-weight:700;color:#1565c0">${fmtQ(a.q)} ${h(a.un)}</td><td>${a.n}</td></tr>`).join('')
+    :'<tr class="empty-row"><td colspan="4">Nenhum material entregue a esta obra no filtro selecionado.</td></tr>';
+  $('od-movs').innerHTML=ms.length?ms.slice(0,300).map(m=>`<tr><td style="white-space:nowrap;font-size:.76rem">${fmtDT2(m.d)}</td><td>${m.t==='epi'?'Entrega':'Saída'}</td><td>${h(m.colab)||'—'}</td><td>${h(m.pn)}</td><td style="font-weight:600">${fmtQ(m.q)}</td><td>${h(m.resp)||'—'}</td></tr>`).join('')+(ms.length>300?`<tr><td colspan="6" style="color:#6b8cae;font-size:.74rem">Mostrando 300 de ${ms.length}. Use o período para refinar ou exporte o CSV.</td></tr>`:'')
+    :'<tr class="empty-row"><td colspan="6">Sem lançamentos.</td></tr>';
 };
-W.obraDetLimpar=function(){ ['od-from','od-to','od-item'].forEach(i=>$(i).value=''); $('od-colab').value=''; renderObraDet(); };
+W.obraDetLimpar=function(){ ['od-from','od-to','od-colab'].forEach(i=>$(i).value=''); renderObraDetalhe(); };
 W.obraDetCSV=function(){
-  const o=db.obras().find(x=>x.id===obDet.id); if(!o) return; const l=movSort(obraDetMovs(),false);
-  const rows=[['Obra','Data','Hora','Tipo','Codigo','Item','Quantidade','Colaborador','Responsavel','Obs']];
-  l.forEach(m=>rows.push([obraLabel(o),fmtData(m.d),fmtHora(m.d),m.t==='epi'?'Entrega':'Saida',movProdCode(m),m.pn,m.q,m.colab||'',m.resp||'',m.obs||'']));
+  const {o,ms}=obraDetMovs(); if(!o) return;
+  const rows=[['Obra','Data','Hora','Tipo','Colaborador','Codigo','Item','Quantidade','Responsavel']].concat(ms.map(m=>[obraLabel(o),fmtData(m.d),fmtHora(m.d),m.t==='epi'?'Entrega':'Saida',m.colab||'',movProdCode(m),m.pn,m.q,m.resp||'']));
   const csv=rows.map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(';')).join('\n');
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));
-  a.download='realtec-obra-'+norm(obraLabel(o)).replace(/[^a-z0-9]+/g,'-')+'-'+todayStr()+'.csv'; a.click(); toast('CSV exportado ('+l.length+' registros).','success');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'})); a.download=`realtec-obra-${(o.code||o.name).replace(/\W+/g,'_')}-${todayStr()}.csv`; a.click();
+  toast(`CSV exportado (${ms.length} registros).`,'success');
 };
 
-/* ═══════════ FILTROS: Entregas e Histórico ═══════════ */
-function obrasParaFiltro(){
-  const mapa=obraMapa(), usados=new Set(), leg={};
-  db.movs().forEach(m=>{ if(!m.ob) return; const o=mapa(m.ob); if(o) usados.add(o.id); else leg[norm(m.ob)]=m.ob; });
-  return {obras:obrasOrd(db.obras()),leg:Object.values(leg).sort(numCmp)};
+/* ── Obra na entrega (obrigatória quando há obras cadastradas) ── */
+function popObraLists(){
+  const ativas=db.obras().filter(obraAtiva), opts=ativas.map(o=>`<option value="${h(obraLabel(o))}">`).join('');
+  ['dl-obras-d','dl-obras-x'].forEach(i=>{ const e=$(i); if(e) e.innerHTML=opts; });
 }
-function preencheSelObra(id,prevVal){
-  const el=$(id); if(!el) return; const f=obrasParaFiltro();
-  el.innerHTML='<option value="">Todas as obras</option>'
-    +f.obras.map(o=>'<option value="id:'+h(o.id)+'">'+h(obraLabel(o))+(obraSelecionavel(o)?'':' (inativa)')+'</option>').join('')
-    +f.leg.map(t=>'<option value="txt:'+h(t)+'">'+h(t)+' (sem cadastro)</option>').join('')
-    +'<option value="__none">Sem obra informada</option>';
-  el.value=[...el.options].some(o=>o.value===prevVal)?prevVal:'';
-}
-function preencheSelColab(id,prevVal,soEntregas){
-  const el=$(id); if(!el) return;
-  const nomes=[...new Set(db.colab().map(c=>c.name).concat(db.movs().filter(m=>!soEntregas||m.t==='epi').map(m=>m.colab).filter(Boolean)))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
-  el.innerHTML='<option value="">Todos os colaboradores</option>'+nomes.map(n=>'<option value="'+h(n)+'">'+h(n)+'</option>').join('');
-  el.value=nomes.includes(prevVal)?prevVal:'';
-}
-function filtraObra(list,val){
-  if(!val) return list;
-  if(val==='__none') return list.filter(m=>!m.ob);
-  if(val.startsWith('txt:')){ const t=norm(val.slice(4)); return list.filter(m=>norm(m.ob)===t); }
-  if(val.startsWith('id:')){ const id=val.slice(3), mapa=obraMapa(); return list.filter(m=>{ const o=m.ob&&mapa(m.ob); return o&&o.id===id; }); }
+const _openEntrega1=openEntregaModal;
+W.openEntregaModal=function(p){ _openEntrega1(p); popObraLists(); const r=$('d-resp'); if(r&&!r.value) r.value=localStorage.getItem('rt_last_resp')||''; };
+const _openExit1=openExitModal; W.openExitModal=function(){ _openExit1.apply(this,arguments); popObraLists(); };
+const _confEnt1=confirmEntrega;
+W.confirmEntrega=function(){
+  if(db.obras().length){
+    const inp=$('d-obra'), v=inp.value.trim();
+    if(!v) return feedbackErro('Selecione a obra / centro de custo da entrega.');
+    const o=resolverObra(v);
+    if(!o) return feedbackErro('Obra não encontrada. Escolha uma da lista ou use “+ Nova obra”.');
+    if(!obraAtiva(o)) return feedbackErro(`A obra ${obraLabel(o)} está inativa e não pode receber novas entregas.`);
+    inp.value=o.name;
+  }
+  const r=$('d-resp').value.trim(); if(r) try{ localStorage.setItem('rt_last_resp',r); }catch(e){}
+  _confEnt1();
+};
+W.entregaNovaObra=function(){
+  const v=$('d-obra').value.trim();
+  W._afterObraSave=o=>{ $('d-obra').value=obraLabel(o); toast(`Obra ${obraLabel(o)} cadastrada e selecionada.`,'success'); };
+  openObraModal(); if(v&&!resolverObra(v)){ const m=/^([A-Za-z0-9._\/]+)\s*[-–—]\s*(.+)$/.exec(v); if(m){ $('o-code').value=m[1]; $('o-name').value=m[2]; } else $('o-name').value=v; }
+};
+const _saveExit1=saveExit;
+W.saveExit=function(){ const i=$('x-obra'), o=i&&resolverObra(i.value); if(o&&obraAtiva(o)) i.value=o.name; else if(o) return feedbackErro(`A obra ${obraLabel(o)} está inativa.`); _saveExit1(); };
+
+/* ── Entrada: evita lançar duas vezes o mesmo recebimento (mesmo documento + item) ── */
+const _saveEntry1=saveEntry;
+W.saveEntry=function(force){
+  const pid=$('e-prod').value, nf=$('e-nf').value.trim();
+  if(force!==true&&pid&&nf){
+    const dup=db.movs().find(m=>m.t==='e'&&m.pid===pid&&norm(m.nf)===norm(nf));
+    if(dup){ opConfirm('Possível entrada duplicada',`<div style="line-height:1.8">Já existe uma entrada deste item com o documento <strong>${h(nf)}</strong> (${fmtDT(dup.d)}, ${fmtQ(dup.q)}).<br>Se o recebimento já foi lançado, não repita. Lançar mesmo assim?</div>`,
+      ()=>{ closeOpConf(); W.saveEntry(true); },'Lançar mesmo assim','btn-danger'); return; }
+  }
+  _saveEntry1();
+};
+
+/* ── Filtros combinados (Histórico e Entregas) ── */
+const movCat=m=>{ const p=m.pid?findProd(m.pid):null; return p?(p.cat||''):''; };
+W.filtrosV2=function(list,pre){
+  const g=id=>(($(id)||{}).value)||'', ob=g(pre+'-obra'), co=g(pre+'-colab'), ca=g(pre+'-cat');
+  if(ob){ const o=db.obras().find(x=>obraLabel(x)===ob), k=norm(o?o.name:ob);
+    list=list.filter(m=>norm(m.ob)===k||(o&&norm(m.ob)===norm(obraLabel(o)))); }
+  if(co) list=list.filter(m=>norm(m.colab)===norm(co));
+  if(ca) list=list.filter(m=>norm(movCat(m))===norm(ca));
   return list;
+};
+function popFiltros(pre){
+  const movs=db.movs(), obs=db.obras(), nomesObra=new Set(obs.map(o=>norm(o.name))), rotulos=new Set(obs.map(o=>norm(obraLabel(o))));
+  const lista=obs.map(obraLabel); movs.forEach(m=>{ const k=norm(m.ob); if(k&&!nomesObra.has(k)&&!rotulos.has(k)&&!lista.includes(m.ob)) lista.push(m.ob); });
+  const fill=(id,vals,ph)=>{ const e=$(id); if(!e) return; const v=e.value; e.innerHTML=`<option value="">${ph}</option>`+vals.map(x=>`<option value="${h(x)}">${h(x)}</option>`).join(''); e.value=vals.includes(v)?v:''; };
+  const sort=a=>a.slice().sort((x,y)=>String(x).localeCompare(String(y),'pt-BR',{numeric:true}));
+  fill(pre+'-obra',sort(lista),'Todas as obras');
+  fill(pre+'-colab',sort([...new Set(movs.map(m=>m.colab).filter(Boolean))]),'Todos os colaboradores');
+  fill(pre+'-cat',sort([...new Set(db.prods().map(p=>p.cat).filter(Boolean))]),'Todas as categorias');
 }
-/* Ganchos chamados por renderEpis / renderHist / histFiltered (filtros combinados em AND) */
-W.epiDatasAtivas=()=>!!(($('epi-from')||{}).value||($('epi-to')||{}).value);
-W.epiExtra=function(list){
-  preencheSelColab('epi-colab',$('epi-colab').value,true); preencheSelObra('epi-obra',$('epi-obra').value);
-  const col=$('epi-colab').value, ob=$('epi-obra').value, from=$('epi-from').value, to=$('epi-to').value;
-  if(col) list=list.filter(m=>norm(m.colab)===norm(col));
-  list=filtraObra(list,ob);
-  if(from||to) list=list.filter(m=>inPeriod(m.d,from,to));
-  const validas=list.filter(m=>!m.canc);
-  const s=$('epi-sum'); if(s) s.innerHTML='<strong>'+validas.length+'</strong> entrega(s) · <strong>'+fmtQ(validas.reduce((a,m)=>a+(Number(m.q)||0),0))+'</strong> item(ns) entregue(s)'+(list.length!==validas.length?' <span style="color:#6b8cae">('+(list.length-validas.length)+' cancelada(s) não contam)</span>':'');
-  return list;
-};
-W.histExtra=function(movs){
-  const sc=$('h-colab'), so=$('h-obra'), sk=$('h-cat'); if(!sc) return movs;
-  preencheSelColab('h-colab',sc.value,false); preencheSelObra('h-obra',so.value);
-  const cats=[...new Set(db.prods().map(p=>p.cat).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR')), pk=sk.value;
-  sk.innerHTML='<option value="">Todas as categorias</option>'+cats.map(c=>'<option value="'+h(c)+'">'+h(c)+'</option>').join(''); sk.value=cats.includes(pk)?pk:'';
-  if(sc.value) movs=movs.filter(m=>norm(m.colab)===norm(sc.value));
-  movs=filtraObra(movs,so.value);
-  if(sk.value) movs=movs.filter(m=>norm(movCat(m))===norm(sk.value));
-  const s=$('h-sum'); if(s) s.innerHTML='<strong>'+movs.length+'</strong> movimentação(ões) no filtro atual';
-  return movs;
-};
-W.epiLimpar=function(){
-  ['epi-search','epi-colab','epi-obra','epi-from','epi-to','epi-filter'].forEach(i=>{ const e=$(i); if(e) e.value=''; });
-  $('epi-period').value='365'; pages['epis']=1; renderEpis();
-};
-['epi-colab','epi-obra'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',()=>{ pages['epis']=1; renderEpis(); }); });
-['epi-from','epi-to'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',()=>{ pages['epis']=1; renderEpis(); }); });
-const ep=$('epi-period'); if(ep) ep.addEventListener('change',()=>{ $('epi-from').value=''; $('epi-to').value=''; });
-['h-colab','h-obra','h-cat'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',()=>{ pages['history']=1; renderHist(); }); });
-const _clrHist12=clearHistFilters;
-W.clearHistFilters=function(){ ['h-mat','h-colab','h-obra','h-cat'].forEach(i=>{ const e=$(i); if(e) e.value=''; }); _clrHist12(); };
+const _rh=renderHist; W.renderHist=function(){ popFiltros('h'); return _rh.apply(this,arguments); };
+const _re=renderEpis; W.renderEpis=function(){ popFiltros('e'); return _re.apply(this,arguments); };
+const _ch=clearHistFilters;
+W.clearHistFilters=function(){ ['h-mat','h-obra','h-colab','h-cat'].forEach(i=>{ const e=$(i); if(e) e.value=''; }); _ch(); };
+W.clearEpiFilters=function(){ ['epi-search','epi-filter','e-obra','e-colab','e-cat','e-from','e-to'].forEach(i=>{ const e=$(i); if(e) e.value=''; }); $('epi-period').value='365'; pages['epis']=1; renderEpis(); };
+['h-obra','h-colab','h-cat'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',()=>{ pages['history']=1; renderHist(); }); });
+['e-obra','e-colab','e-cat','e-from','e-to'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',()=>{ pages['epis']=1; renderEpis(); }); });
+const es=$('epi-search'); if(es) es.addEventListener('input',()=>{ pages['epis']=1; renderEpis(); });
+const ob=$('ob-q'); if(ob) ob.addEventListener('input',()=>{ pages['obras']=1; renderObras(); });
 
-/* ═══════════ DASHBOARD: consumo consistente (sem entregas canceladas) ═══════════ */
-W.buildObraChart=function(movs){
-  const mapa=obraMapa(), m={};
-  movs.filter(mv=>movConsome(mv)&&mv.ob).forEach(mv=>{ const o=mapa(mv.ob), k=o?obraLabel(o):mv.ob; m[k]=(m[k]||0)+(Number(mv.q)||0); });
-  const sorted=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  destroyChart('obra');
-  const cv=$('ch-obra'); if(!cv) return;
-  if(!sorted.length){ const c=cv.getContext('2d'); c.clearRect(0,0,cv.width,cv.height); c.fillStyle='#6b8cae'; c.font='13px Inter,sans-serif'; c.textAlign='center'; c.fillText('Sem consumo por obra registrado',cv.width/2,cv.height/2); return; }
-  charts['obra']=new Chart(cv.getContext('2d'),{type:'doughnut',data:{labels:sorted.map(x=>x[0]),datasets:[{data:sorted.map(x=>x[1]),backgroundColor:['#1d6fdb','#10b981','#f59e0b','#ef4444','#8b5cf6','#3b82f6'],borderWidth:2,borderColor:'#ffffff'}]},
-    options:{...CHART_CFG,plugins:{legend:{labels:{color:'#7a9bc0',font:{size:9},boxWidth:10,padding:8}}}}});
-};
-const _buildTop12=buildTopChart;
-W.buildTopChart=function(movs){ _buildTop12(movs.filter(m=>m.t!=='epi'||!m.canc)); };
-const _buildIO12=buildIOChart;
-W.buildIOChart=function(movs){ _buildIO12(movs.filter(m=>m.t!=='epi'||!m.canc)); };
-const _renderDash12=renderDash;
-W.renderDash=function(){
-  _renderDash12();
-  try{   /* KPI de entregas dos 7 dias não conta canceladas */
-    const from=daysAgoStr(7), arr=db.movs().filter(m=>m.t==='epi'&&!m.canc&&inPeriod(m.d,from,''));
-    $('k-ent7').textContent=arr.length;
-    $('k-ent7s').textContent=arr.length?fmtQ(arr.reduce((a,m)=>a+(Number(m.q)||0),0))+' itens entregues':'nenhum registro';
-  }catch(e){}
-};
-
-/* ═══════════ PRODUTOS: cadastro manual sempre disponível na busca ═══════════ */
-const _renderProds12=renderProds;
-W.renderProds=function(){
-  _renderProds12();
-  const q=(($('p-search')||{}).value||'').trim(), cel=document.querySelector('#prods-body .empty-row td');
-  if(cel&&q) cel.innerHTML='Nenhum item encontrado para “'+h(q)+'”.<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="novoItemDaBusca()">+ Cadastrar “'+h(q)+'” manualmente</button>';
-};
-W.novoItemDaBusca=function(){
-  const q=$('p-search').value.trim(); openProdModal(); $('f-name').value=q; $('f-name').dispatchEvent(new Event('input')); setTimeout(()=>$('f-cat').focus(),90);
-};
-
-/* ═══════════ RELATÓRIOS: lista de obras com rótulo oficial ═══════════ */
-const _refRep12=refreshReportLists;
-W.refreshReportLists=function(){
-  _refRep12();
-  const el=$('dl-obra-r'); if(!el) return;
-  const f=obrasParaFiltro(), vals=[...new Set(f.obras.map(obraLabel).concat(f.leg))];
-  el.innerHTML=vals.map(v=>'<option value="'+h(v)+'">').join('');
-};
-
-/* ═══════════ Navegação / rótulos ═══════════ */
-try{ sectionMetaV4.obras='Centros de Custo / Obras'; }catch(e){}
-['ob-search'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('input',()=>{ pages['obras']=1; renderObras(); }); });
-const so=$('ob-status'); if(so) so.addEventListener('change',()=>{ pages['obras']=1; renderObras(); });
-['od-from','od-to','od-colab'].forEach(i=>{ const e=$(i); if(e) e.addEventListener('change',renderObraDet); });
-const oi=$('od-item'); if(oi) oi.addEventListener('input',renderObraDet);
-try{ refreshAll(); }catch(e){}
+/* ── Textos de orientação ── */
+function banner(sec,html){ const s=$(sec); if(!s) return; const ph=s.querySelector('.page-header'); if(!ph) return;
+  const d=document.createElement('div'); d.className='ce-note'; d.style.margin='0 0 12px'; d.innerHTML=html; ph.insertAdjacentElement('afterend',d); }
+banner('s-entries','<strong>Recebimento de materiais:</strong> o sistema <u>não</u> é integrado à BA de Material. Lance a entrada aqui uma única vez, no recebimento, informando o número da BA ou NF em “NF / Documento” (o sistema avisa se o mesmo documento já foi lançado para o item).');
+banner('s-exits','<strong>Entregas a colaboradores</strong> baixam o estoque automaticamente em <em>Entregas (Colaborador)</em>. Use esta tela apenas para consumo de obra/serviço sem colaborador específico.');
+const ne=document.querySelector('.nav-link[data-section="entries"] .nav-label'); if(ne) ne.textContent='Entradas (Recebimento)';
+try{ popObraLists(); }catch(e){}
 })();
 
 </script>
